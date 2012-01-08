@@ -89,11 +89,11 @@ ddaccordion.init({
 
             <div class="sidebarmenu">
 				<a class="menuitem" href="<?php echo base_url() ?>index.php/home">Halaman Utama</a>
-                <a class="menuitem submenuheader" href="">Arus Kas</a>
+                <a class="menuitem submenuheader" href="">Master</a>
                 <div class="submenu">
                     <ul>
-                    <?php if($tambah_aruskas) { ?><li><a href="<?php echo base_url() ?>index.php/arus_kas/add">Tambah Transaksi</a></li><?php } ?>
-                    <li><a href="<?php echo base_url() ?>index.php/arus_kas">Daftar Transaksi</a></li>
+                    <li><a href="<?php echo base_url() ?>index.php/master_kriteria">Kriteria</a></li>
+                    <li><a href="<?php echo base_url() ?>index.php/master_subkriteria">Subkriteria</a></li>
                     </ul>
                 </div>
                 <a class="menuitem submenuheader" href="" >User Menu</a>

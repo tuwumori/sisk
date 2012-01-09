@@ -2,7 +2,7 @@
 
 class Master_subkriteria extends CI_Controller {
 
-	public __construct()
+	public function __construct()
 	{
 		parent::__construct();
 		$this->load->library('flexigrid');	
@@ -84,7 +84,7 @@ class Master_subkriteria extends CI_Controller {
 										$row->NAMA_SUBKRITERIA,
 										$row->PRIORITAS_SUBKRITERIA,
 								'<a href='.base_url().'index.php/master_subkriteria/edit/'.$row->SUBKRITERIA_ID.'><img border=\'0\' src=\''.base_url().'images/flexigrid/magnifier.png\'></a>',
-								'<a href='.base_url().'index.php/master_subkriteria/delete/'.$row->SUBKRITERIA_ID.'><img border=\'0\' src=\''.base_url().'images/flexigrid/2.png\'></a>'
+								'<a href='.base_url().'index.php/master_subkriteria/delete/'.$row->SUBKRITERIA_ID.' onclick="return confirm(\'Are you sure you want to delete?\')"><img border=\'0\' src=\''.base_url().'images/flexigrid/2.png\'></a>'
 								);
 		}
 		

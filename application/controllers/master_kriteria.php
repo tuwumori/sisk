@@ -84,7 +84,7 @@ class Master_kriteria extends CI_Controller {
 										$row->NAMA_KRITERIA,
 										$row->PRIORITAS_KRITERIA,
 								'<a href='.base_url().'index.php/master_kriteria/edit/'.$row->KRITERIA_ID.'><img border=\'0\' src=\''.base_url().'images/flexigrid/magnifier.png\'></a>',
-								'<a href='.base_url().'index.php/master_kriteria/delete/'.$row->KRITERIA_ID.'><img border=\'0\' src=\''.base_url().'images/flexigrid/2.png\'></a>'
+								'<a href='.base_url().'index.php/master_kriteria/delete/'.$row->KRITERIA_ID.' onclick="return confirm(\'Are you sure you want to delete?\')"><img border=\'0\' src=\''.base_url().'images/flexigrid/2.png\'></a>'
 								);
 		}
 		
@@ -146,7 +146,7 @@ class Master_kriteria extends CI_Controller {
 	
 	public function delete($kriteria_id)
 	{
-		$this->subkriteria_model->delete($kriteria_id);
+		$this->kriteria_model->delete($kriteria_id);
 		redirect('master_kriteria');
 	}
 }

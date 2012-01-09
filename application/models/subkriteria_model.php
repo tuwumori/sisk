@@ -20,12 +20,12 @@ class Subkriteria_model extends CI_Model {
 	
 	function get_data_flexigrid()
 	{
-		$this->db->select('*')->from('kriteria');
+		$this->db->select('*')->from('subkriteria');
 			
 		$this->CI->flexigrid->build_query();		
 		$return['records'] = $this->db->get();
 		
-		$this->db->select('*')->from('kriteria');
+		$this->db->select('*')->from('subkriteria');
 		
 		$this->CI->flexigrid->build_query(FALSE);
 		$return['record_count'] = $this->db->count_all_results();
@@ -40,9 +40,9 @@ class Subkriteria_model extends CI_Model {
 		return $this->db->get();
 	}
 	
-	function update($absensi_id, $data)
+	function update($subkriteria_id, $data)
 	{
-		$this->db->where('ABSENSI_ID',$absensi_id)->update('absensi', $data);
+		$this->db->where('SUBKRITERIA_ID',$subkriteria_id)->update('subkriteria', $data);
 	}
 	
 	function get_pegawai()

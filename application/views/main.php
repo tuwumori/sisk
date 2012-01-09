@@ -96,6 +96,13 @@ ddaccordion.init({
                     <li><a href="<?php echo base_url() ?>index.php/master_subkriteria">Subkriteria</a></li>
                     </ul>
                 </div>
+                <a class="menuitem submenuheader" href="">Penghitungan</a>
+                <div class="submenu">
+                    <ul>
+                    <li><a href="<?php echo base_url() ?>index.php/ahp_kriteria">Kriteria</a></li>
+                    <li><a href="<?php echo base_url() ?>index.php/ahp_subkriteria">Subkriteria</a></li>
+                    </ul>
+                </div>
                 <a class="menuitem submenuheader" href="" >User Menu</a>
                 <div class="submenu">
                     <ul>

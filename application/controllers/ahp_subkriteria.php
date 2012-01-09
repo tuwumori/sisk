@@ -126,7 +126,7 @@ class Master_kriteria extends CI_Controller {
 		}
 	}
 	
-	public function edit($kriteria_id)
+	public function edit()
 	{
 		$data = array(
 					'nama_kriteria' => $this->input->post('kriteria')

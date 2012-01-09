@@ -122,7 +122,9 @@ class Ahp_kriteria extends CI_Controller {
 		}
 		//print matriks penjumlahan setiap baris
 		$jumlah_per_baris3 = array();
+		$hasil = array();
 		$jumlah_per_cell3 = 0;
+		$jumlah = 0;
 		for($t=0;$t<$jumlah_kriteria;$t++)
 		{
 			for($u=0;$u<$jumlah_kriteria;$u++)
@@ -132,10 +134,18 @@ class Ahp_kriteria extends CI_Controller {
 				echo '<br />';
 			}
 			$jumlah_per_baris3[$t] = $jumlah_per_cell3;
+			$hasil[$t] = $jumlah_per_baris3[$t] + $prioritas[$t];
+			$jumlah = $jumlah + $hasil[$t];
 			$jumlah_per_cell3 = 0;
 			echo 'jumlah baris 3 ['.$t.'] = '.$jumlah_per_baris3[$t];
 			echo '<br />';
+			echo 'hasil ['.$t.'] => '.$jumlah_per_baris3[$t].'+'.$prioritas[$t].' = '.$hasil[$t];
+			echo '<br />';
 		}
+		$alpha_max = $jumlah/$jumlah_kriteria;
+		$consistency_index = ($alpha_max - $jumlah_kriteria)/$jumlah_kriteria;
+		$consistency_ratio = $consistency_index/1.12;
+		echo 'CR = '.$consistency_ratio;
 	}
 }
 

@@ -35,9 +35,9 @@ class Kriteria_model extends CI_Model {
 		return $this->db->get();
 	}
 	
-	function update($absensi_id, $data)
+	function update($kriteria_id, $data)
 	{
-		$this->db->where('ABSENSI_ID',$absensi_id)->update('absensi', $data);
+		$this->db->where('KRITERIA_ID',$kriteria_id)->update('kriteria', $data);
 	}
 	
 	function get_pegawai()

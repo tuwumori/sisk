@@ -31,6 +31,7 @@ class Master_subkriteria extends CI_Controller {
 		$colModel['no'] = array('No',20,TRUE,'center',0);
 		$colModel['nama_subkriteria'] = array('Nama Subkriteria',150,TRUE,'center',1);
 		$colModel['prioritas_subkriteria'] = array('Prioritas',100,TRUE,'center',1);
+		$colModel['bobot'] = array('Bobot',30,TRUE,'center',1);
 		$colModel['ubah'] = array('Ubah',30,FALSE,'center',0);
 		$colModel['hapus'] = array('Hapus',30,FALSE,'center',0);
 			
@@ -83,6 +84,7 @@ class Master_subkriteria extends CI_Controller {
 										$no,
 										$row->NAMA_SUBKRITERIA,
 										$row->PRIORITAS_SUBKRITERIA,
+										$row->BOBOT,
 								'<a href='.base_url().'index.php/master_subkriteria/edit/'.$row->SUBKRITERIA_ID.'><img border=\'0\' src=\''.base_url().'images/flexigrid/magnifier.png\'></a>',
 								'<a href='.base_url().'index.php/master_subkriteria/delete/'.$row->SUBKRITERIA_ID.' onclick="return confirm(\'Are you sure you want to delete?\')"><img border=\'0\' src=\''.base_url().'images/flexigrid/2.png\'></a>'
 								);
@@ -112,7 +114,8 @@ class Master_subkriteria extends CI_Controller {
 	public function add_process()
 	{
 		$data = array(
-						'nama_subkriteria' => $this->input->post('subkriteria')
+						'nama_subkriteria' => $this->input->post('subkriteria'),
+						'bobot' => $this->input->post('bobot')
 					);
 		if($this->cek_validasi())
 		{
@@ -126,10 +129,11 @@ class Master_subkriteria extends CI_Controller {
 		}
 	}
 	
-	public function edit()
+	public function edit($subkriteria_id)
 	{
 		$data = array(
-					'nama_subkriteria' => $this->input->post('subkriteria')
+					'nama_subkriteria' => $this->input->post('subkriteria'),
+					'bobot' => $this->input->post('bobot')
 				);
 		if($this->cek_validasi())
 		{
@@ -139,6 +143,7 @@ class Master_subkriteria extends CI_Controller {
 		else
 		{
 			$data['subkriteria'] = $this->subkriteria_model->get_subkriteria_by_id($subkriteria_id)->row()->NAMA_SUBKRITERIA;
+			$data['bobot'] = $this->subkriteria_model->get_subkriteria_by_id($subkriteria_id)->row()->BOBOT;
 			$data['content'] = $this->load->view('form_edit_master_subkriteria',$data,true);
 			$this->load->view('main',$data);
 		}

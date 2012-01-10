@@ -45,7 +45,7 @@
 						echo '</td>';
 						
 					}else{							
-						$bobot_dipilih = 0; if(set_value('bobot')!=0) $bobot_dipilih = set_value('bobot');
+						$bobot_dipilih = 0; if(set_value('bobot'.$b)!=0) $bobot_dipilih = set_value('bobot'.$b);
 						echo '<td>';
 						echo form_dropdown('bobot'.$b, $bobot, $bobot_dipilih, 'size="0"');
 						echo '</td>';
@@ -56,7 +56,8 @@
 				$m--;
 				echo '</tr>';
 				$i++;
-			} ?>             	
+			} ?>
+			<input type="hidden" name="max_bobot" value="<?php echo $b;?>" />             	
     </tbody>
 </table>
 	<dl class="submit">

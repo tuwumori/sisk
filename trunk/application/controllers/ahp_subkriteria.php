@@ -64,14 +64,14 @@ class Ahp_subkriteria extends CI_Controller {
 		if($this->cek_validasi())
 		{
 			//mendapatkan jumlah kriteria pada tabel kriteria
-			$jumlah_kriteria = $this->ahp_kriteria_model->get_jumlah_kriteria();
+			$jumlah_subkriteria = $this->ahp_subkriteria_model->get_jumlah_subkriteria();
 			$arrray1 = array();
 			$k = 0;
 			$l = 0;
 			//membuat matriks perbandingan berpasangan 
-			for($i=0;$i<$jumlah_kriteria;$i++)
+			for($i=0;$i<$jumlah_subkriteria;$i++)
 			{
-				for($j=$k;$j<$jumlah_kriteria;$j++)
+				for($j=$k;$j<$jumlah_subkriteria;$j++)
 				{
 					if($i==$j)
 					{
@@ -87,9 +87,9 @@ class Ahp_subkriteria extends CI_Controller {
 				$k++;
 			}
 			//menampilkan semua elemen array
-			for($p=0;$p<$jumlah_kriteria;$p++)
+			for($p=0;$p<$jumlah_subkriteria;$p++)
 			{
-				for($q=0;$q<$jumlah_kriteria;$q++)
+				for($q=0;$q<$jumlah_subkriteria;$q++)
 				{
 					echo '['.$p.']['.$q.'] = '.$array1[$p][$q];
 					echo '<br />';
@@ -98,9 +98,9 @@ class Ahp_subkriteria extends CI_Controller {
 			//mencari jumlah setiap baris matriks perbandingan berpasangan
 			$jumlah_per_baris = array();
 			$jumlah_per_cell = 0;
-			for($y=0;$y<$jumlah_kriteria;$y++)
+			for($y=0;$y<$jumlah_subkriteria;$y++)
 			{
-				for($z=0;$z<$jumlah_kriteria;$z++)
+				for($z=0;$z<$jumlah_subkriteria;$z++)
 				{
 					$jumlah_per_cell = $jumlah_per_cell + $array1[$y][$z];
 				}
@@ -111,9 +111,9 @@ class Ahp_subkriteria extends CI_Controller {
 			}
 			//matriks nilai kriteria
 			$array2 = array();
-			for($m=0;$m<$jumlah_kriteria;$m++)
+			for($m=0;$m<$jumlah_subkriteria;$m++)
 			{
-				for($n=0;$n<$jumlah_kriteria;$n++)
+				for($n=0;$n<$jumlah_subkriteria;$n++)
 				{				
 					$array2[$m][$n] = $array1[$m][$n]/$jumlah_per_baris[$m];
 					echo '['.$m.']['.$n.'] = '.$array2[$m][$n];
@@ -124,17 +124,17 @@ class Ahp_subkriteria extends CI_Controller {
 			$jumlah_per_baris2 = array();
 			$jumlah_per_cell2 = 0;
 			$prioritas = array();
-			for($o=0;$o<$jumlah_kriteria;$o++)
+			for($o=0;$o<$jumlah_subkriteria;$o++)
 			{
-				for($p=0;$p<$jumlah_kriteria;$p++)
+				for($p=0;$p<$jumlah_subkriteria;$p++)
 				{				
 					$jumlah_per_cell2 = $jumlah_per_cell2 + $array2[$p][$o];
 				}
 				$jumlah_per_baris2[$o] = $jumlah_per_cell2;
 				$prioritas[$o] = $jumlah_per_cell2/$jumlah_kriteria;
 				//menyimpan nilai prioritas ke database tabel kriteria
-				$data = array('PRIORITAS_KRITERIA' => $prioritas[$o]);
-				$this->kriteria_model->update($this->input->post($o), $data);
+				$data = array('PRIORITAS_SUBKRITERIA' => $prioritas[$o]);
+				$this->subkriteria_model->update($this->input->post($o), $data);
 				
 				$jumlah_per_cell2 = 0;
 				echo 'jumlah baris 2 ['.$o.'] = '.$jumlah_per_baris2[$o];
@@ -144,9 +144,9 @@ class Ahp_subkriteria extends CI_Controller {
 			}
 			//matriks penjumlahan setiap baris
 			$array3 = array();
-			for($r=0;$r<$jumlah_kriteria;$r++)
+			for($r=0;$r<$jumlah_subkriteria;$r++)
 			{
-				for($s=0;$s<$jumlah_kriteria;$s++)
+				for($s=0;$s<$jumlah_subkriteria;$s++)
 				{				
 					$array3[$s][$r] = $array1[$s][$r]*$prioritas[$r];
 					//echo '['.$r.']['.$s.'] = '.$array3[$r][$s];
@@ -158,9 +158,9 @@ class Ahp_subkriteria extends CI_Controller {
 			$hasil = array();
 			$jumlah_per_cell3 = 0;
 			$jumlah = 0;
-			for($t=0;$t<$jumlah_kriteria;$t++)
+			for($t=0;$t<$jumlah_subkriteria;$t++)
 			{
-				for($u=0;$u<$jumlah_kriteria;$u++)
+				for($u=0;$u<$jumlah_subkriteria;$u++)
 				{	
 					$jumlah_per_cell3 = $jumlah_per_cell3 + $array3[$u][$t];			
 					echo '['.$t.']['.$u.'] = '.$array3[$t][$u];
@@ -175,8 +175,8 @@ class Ahp_subkriteria extends CI_Controller {
 				echo 'hasil ['.$t.'] => '.$jumlah_per_baris3[$t].'+'.$prioritas[$t].' = '.$hasil[$t];
 				echo '<br />';
 			}
-			$alpha_max = $jumlah/$jumlah_kriteria;
-			$consistency_index = ($alpha_max - $jumlah_kriteria)/$jumlah_kriteria;
+			$alpha_max = $jumlah/$jumlah_subkriteria;
+			$consistency_index = ($alpha_max - $jumlah_subkriteria)/$jumlah_subkriteria;
 			$consistency_ratio = $consistency_index/1.12;
 			echo 'CR = '.$consistency_ratio;
 			redirect('master_subkriteria');

@@ -1,8 +1,16 @@
 <script type="text/javascript" src="<?php echo base_url() ?>js/niceforms.js"></script>
 <h2>Prioritas Kriteria</h2>
 <div>
-	<?php echo validation_errors(); ?>
-	<?php echo form_open('ahp_kriteria/process1', 'class ="niceform"');?>						
+	<?php 
+		echo validation_errors(); 
+		$i = 0;
+		foreach($result_kriteria as $row)
+		{
+			$id_kriteria[$i] = $row->KRITERIA_ID;  
+			$i++;
+		}
+	?>
+	<?php echo form_open('ahp_kriteria/process1', 'class ="niceform"',$id_kriteria);?>						
 	<table id="rounded-corner" summary="2007 Major IT Companies' Profit">
     <thead>
     	<tr>

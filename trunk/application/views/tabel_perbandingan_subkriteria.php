@@ -1,16 +1,66 @@
-	<script type="text/javascript" src="<?php echo base_url() ?>js/niceforms.js"></script>
-	<h2>Tambah Kriteria</h2>
-	<div>
-	<?php echo validation_errors(); ?>
-	<?php echo form_open('master_kriteria/add_process', 'class ="niceform"');?>						
-				<a href="<?php echo base_url()?>index.php/master_kriteria">Kembali ke master kriteria</a>
-                    <dl>
-                        <dt><label for="jabatan">Nama Kriteria : </label></dt>
-                        <?php $kriteria = ''; if(set_value('kriteria')!='') $kriteria = set_value('kriteria')?>
-						<dd><?php echo form_input(array('name'=>'kriteria', 'id'=>'kriteria' ,'size'=>'54','type'=>'text', 'maxlength'=>'255', 'value'=>$kriteria)); ?></dd>
-                    </dl>
-                    <dl class="submit">
-						<dd><input type="submit" name="submit" id="submit" value="Submit" /></dd>
-                    </dl>
-		<?php echo form_close();?>
-	</div>
+<script type="text/javascript" src="<?php echo base_url() ?>js/niceforms.js"></script>
+<h2>Prioritas Subkriteria</h2>
+<div>
+	<?php 
+		echo validation_errors(); 
+		$i = 0;
+		foreach($result_subkriteria as $row)
+		{
+			$id_subkriteria[$i] = $row->SUBKRITERIA_ID;  
+			$i++;
+		}
+	?>
+	<?php echo form_open('ahp_subkriteria/process1', 'class ="niceform"',$id_subkriteria);?>						
+	<table id="rounded-corner" summary="2007 Major IT Companies' Profit">
+    <thead>
+    	<tr>
+			<th></th>
+			<?php foreach($result_subkriteria as $row) {?>
+				<th><?php echo $row->NAMA_SUBKRITERIA;?></th>
+			<?}?>       	
+        </tr>
+    </thead>
+    <tbody>
+        <?php	
+			$i=0;
+			$l = 0;
+			$m = $jumlah_subkriteria;
+			$b=0;
+			foreach($result_subkriteria as $row)
+			{
+        
+				echo '<tr>';
+				echo '<td>';
+				echo $row->NAMA_SUBKRITERIA;
+				echo '</td>';
+				
+				for($k=0;$k<$l;$k++){
+					echo '<td> - </td>';
+				}
+				for($j=0;$j<$m;$j++) {
+					if($j==0){
+						echo '<td>';
+						echo '1';
+						echo '</td>';
+						
+					}else{							
+						$bobot_dipilih = 0; if(set_value('bobot'.$b)!=0) $bobot_dipilih = set_value('bobot'.$b);
+						echo '<td>';
+						echo form_dropdown('bobot'.$b, $bobot, $bobot_dipilih, 'size="0"');
+						echo '</td>';
+						$b++;
+					}
+				}
+				$l++;
+				$m--;
+				echo '</tr>';
+				$i++;
+			} ?>
+			<input type="hidden" name="max_bobot" value="<?php echo $b;?>" />             	
+    </tbody>
+</table>
+	<dl class="submit">
+		<dd><input type="submit" name="submit" id="submit" value="Hitung" /></dd>
+    </dl>
+	<?php echo form_close();?>
+</div>

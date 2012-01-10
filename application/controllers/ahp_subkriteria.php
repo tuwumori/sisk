@@ -63,7 +63,7 @@ class Ahp_subkriteria extends CI_Controller {
 	{
 		if($this->cek_validasi())
 		{
-			//mendapatkan jumlah kriteria pada tabel kriteria
+			//mendapatkan jumlah kriteria pada tabel subkriteria
 			$jumlah_subkriteria = $this->ahp_subkriteria_model->get_jumlah_subkriteria();
 			$arrray1 = array();
 			$k = 0;
@@ -120,7 +120,7 @@ class Ahp_subkriteria extends CI_Controller {
 					echo '<br />';
 				}
 			}
-			//print jumlah per baris matriks nilai kriteria
+			//print jumlah per baris matriks nilai subkriteria
 			$jumlah_per_baris2 = array();
 			$jumlah_per_cell2 = 0;
 			$prioritas = array();
@@ -131,7 +131,7 @@ class Ahp_subkriteria extends CI_Controller {
 					$jumlah_per_cell2 = $jumlah_per_cell2 + $array2[$p][$o];
 				}
 				$jumlah_per_baris2[$o] = $jumlah_per_cell2;
-				$prioritas[$o] = $jumlah_per_cell2/$jumlah_kriteria;
+				$prioritas[$o] = $jumlah_per_cell2/$jumlah_subkriteria;
 				//menyimpan nilai prioritas ke database tabel kriteria
 				$data = array('PRIORITAS_SUBKRITERIA' => $prioritas[$o]);
 				$this->subkriteria_model->update($this->input->post($o), $data);
@@ -179,6 +179,15 @@ class Ahp_subkriteria extends CI_Controller {
 			$consistency_index = ($alpha_max - $jumlah_subkriteria)/$jumlah_subkriteria;
 			$consistency_ratio = $consistency_index/1.12;
 			echo 'CR = '.$consistency_ratio;
+			//menentukan subprioritas subkriteria
+			$prioritas_max = max($prioritas);
+			$subprioritas = array();
+			for($v=0;$v<$jumlah_subkriteria;$v++)
+			{
+				$subprioritas[$v] = $prioritas[$v]/$prioritas_max;
+				echo 'subprioritas ['.$v.'] => '.$prioritas[$v].' / '.$prioritas_max.' = '.$subprioritas[$v];
+				echo '<br />';
+			}
 			redirect('master_subkriteria');
 		}
 		else

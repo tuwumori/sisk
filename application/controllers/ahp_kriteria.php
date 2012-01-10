@@ -6,6 +6,7 @@ class Ahp_kriteria extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model('ahp_kriteria_model');
+		$this->load->model('kriteria_model');
 		//$this->cek_session();
 	}
 	
@@ -103,6 +104,10 @@ class Ahp_kriteria extends CI_Controller {
 			}
 			$jumlah_per_baris2[$o] = $jumlah_per_cell2;
 			$prioritas[$o] = $jumlah_per_cell2/$jumlah_kriteria;
+			//menyimpan nilai prioritas ke database tabel kriteria
+			$data = array('PRIORITAS_KRITERIA' => $prioritas[$o]);
+			$this->kriteria_model->update($this->input->post($o), $data);
+			
 			$jumlah_per_cell2 = 0;
 			echo 'jumlah baris 2 ['.$o.'] = '.$jumlah_per_baris2[$o];
 			echo '<br />';

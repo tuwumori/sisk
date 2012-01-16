@@ -8,6 +8,7 @@ class Master_subkriteria extends CI_Controller {
 		$this->load->library('flexigrid');	
 		$this->load->helper('flexigrid');
 		$this->load->model('subkriteria_model');
+		$this->load->model('kriteria_model');
 		//$this->cek_session();
 	}
 	
@@ -30,6 +31,7 @@ class Master_subkriteria extends CI_Controller {
 		//$kode_role = $this->session->userdata('kode_role');
 		$colModel['no'] = array('No',20,TRUE,'center',0);
 		$colModel['nama_subkriteria'] = array('Nama Subkriteria',150,TRUE,'center',1);
+		$colModel['nama_kriteria'] = array('Nama Kriteria',150,TRUE,'center',1);
 		$colModel['prioritas_subkriteria'] = array('Prioritas',100,TRUE,'center',1);
 		$colModel['bobot'] = array('Bobot',30,TRUE,'center',1);
 		$colModel['ubah'] = array('Ubah',30,FALSE,'center',0);
@@ -71,7 +73,7 @@ class Master_subkriteria extends CI_Controller {
 	
 	function grid_data_subkriteria() 
 	{
-		$valid_fields = array('SUBKRITERIA_ID','NAMA_SUBKRITERIA');
+		$valid_fields = array('SUBKRITERIA_ID','NAMA_SUBKRITERIA','NAMA_KRITERIA');
 		$this->flexigrid->validate_post('SUBKRITERIA_ID','asc',$valid_fields);
 		$records = $this->subkriteria_model->get_data_flexigrid();
 		$this->output->set_header($this->config->item('json_header'));
@@ -83,6 +85,7 @@ class Master_subkriteria extends CI_Controller {
 										$row->SUBKRITERIA_ID,
 										$no,
 										$row->NAMA_SUBKRITERIA,
+										$row->NAMA_KRITERIA,
 										$row->PRIORITAS_SUBKRITERIA,
 										$row->BOBOT,
 								'<a href='.base_url().'index.php/master_subkriteria/edit/'.$row->SUBKRITERIA_ID.'><img border=\'0\' src=\''.base_url().'images/flexigrid/magnifier.png\'></a>',
@@ -107,7 +110,13 @@ class Master_subkriteria extends CI_Controller {
 	
 	public function add()
 	{
-		$data['content'] = $this->load->view('form_add_master_subkriteria',null,true);
+		$kriteria = $this->kriteria_model->get_kriteria();
+		foreach($kriteria->result() as $row)
+		{
+			$data_kriteria[$row->KRITERIA_ID] = $row->NAMA_KRITERIA;
+		}
+		$data['kriteria'] =  $data_kriteria;
+		$data['content'] = $this->load->view('form_add_master_subkriteria',$data,true);
 		$this->load->view('main',$data);
 	}
 	
@@ -115,6 +124,7 @@ class Master_subkriteria extends CI_Controller {
 	{
 		$data = array(
 						'nama_subkriteria' => $this->input->post('subkriteria'),
+						'kriteria_id' => $this->input->post('kriteria'),
 						'bobot' => $this->input->post('bobot')
 					);
 		if($this->cek_validasi())
@@ -133,6 +143,7 @@ class Master_subkriteria extends CI_Controller {
 	{
 		$data = array(
 					'nama_subkriteria' => $this->input->post('subkriteria'),
+					'kriteria_id' => $this->input->post('kriteria'),
 					'bobot' => $this->input->post('bobot')
 				);
 		if($this->cek_validasi())
@@ -142,6 +153,13 @@ class Master_subkriteria extends CI_Controller {
 		}
 		else
 		{
+			$kriteria = $this->kriteria_model->get_kriteria();
+			foreach($kriteria->result() as $row)
+			{
+				$data_kriteria[$row->KRITERIA_ID] = $row->NAMA_KRITERIA;
+			}
+			$data['kriteria'] =  $data_kriteria;
+			$data['kriteria_dipilih'] = $this->subkriteria_model->get_subkriteria_by_id($subkriteria_id)->row()->KRITERIA_ID;;
 			$data['subkriteria'] = $this->subkriteria_model->get_subkriteria_by_id($subkriteria_id)->row()->NAMA_SUBKRITERIA;
 			$data['bobot'] = $this->subkriteria_model->get_subkriteria_by_id($subkriteria_id)->row()->BOBOT;
 			$data['content'] = $this->load->view('form_edit_master_subkriteria',$data,true);

@@ -21,12 +21,12 @@ class Subkriteria_model extends CI_Model {
 	function get_data_flexigrid()
 	{
 		$this->db->select('*')->from('subkriteria');
-			
+		$this->db->join('kriteria','kriteria.kriteria_id = subkriteria.kriteria_id');
 		$this->CI->flexigrid->build_query();		
 		$return['records'] = $this->db->get();
 		
 		$this->db->select('*')->from('subkriteria');
-		
+		$this->db->join('kriteria','kriteria.kriteria_id = subkriteria.kriteria_id');
 		$this->CI->flexigrid->build_query(FALSE);
 		$return['record_count'] = $this->db->count_all_results();
 		return $return;

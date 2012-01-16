@@ -5,7 +5,16 @@
 	<?php echo form_open('master_subkriteria/add_process', 'class ="niceform"');?>						
 				<a href="<?php echo base_url()?>index.php/master_subkriteria">Kembali ke master subkriteria</a>
                     <dl>
-                        <dt><label for="jabatan">Nama Kriteria : </label></dt>
+                        <dt><label for="role">Kriteria : </label></dt>
+                        <dd>
+                        <?php
+							$kriteria_dipilih = 0; if(set_value('kriteria')!=0) $kriteria_dipilih = set_value('kriteria');
+							echo form_dropdown('kriteria', $kriteria, $kriteria_dipilih, 'size="1"');
+						?>
+						</dd>
+                    </dl>
+                    <dl>
+                        <dt><label for="jabatan">Nama Subkriteria : </label></dt>
                         <?php $subkriteria = ''; if(set_value('subkriteria')!='') $subkriteria = set_value('subkriteria')?>
 						<dd><?php echo form_input(array('name'=>'subkriteria', 'id'=>'subkriteria' ,'size'=>'54','type'=>'text', 'maxlength'=>'255', 'value'=>$subkriteria)); ?></dd>
                     </dl>

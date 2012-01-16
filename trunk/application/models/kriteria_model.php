@@ -40,10 +40,10 @@ class Kriteria_model extends CI_Model {
 		$this->db->where('KRITERIA_ID',$kriteria_id)->update('kriteria', $data);
 	}
 	
-	function get_pegawai()
+	function get_kriteria()
 	{
 		$this->db->select('*');
-		$this->db->from('pegawai');
+		$this->db->from('kriteria');
 		return $this->db->get();
 	}
 	

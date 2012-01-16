@@ -9,6 +9,7 @@ class Ahp_subkriteria extends CI_Controller {
 		$this->load->helper('flexigrid');
 		$this->load->model('subkriteria_model');
 		$this->load->model('ahp_subkriteria_model');
+		$this->load->model('kriteria_model');
 		//$this->cek_session();
 	}
 	
@@ -23,18 +24,41 @@ class Ahp_subkriteria extends CI_Controller {
 	
 	public function index()
 	{
-		$data['jumlah_subkriteria'] = $this->ahp_subkriteria_model->get_jumlah_subkriteria();
-		$data['result_subkriteria'] = $this->ahp_subkriteria_model->get_subkriteria();
-		$data['bobot'] = array(
-							0 => 'bobot',
-							1 => '1',
-							2 => '2',
-							3 => '3',
-							4 => '4',
-							5 => '5'
-							);
-		$data['content'] = $this->load->view('tabel_perbandingan_subkriteria',$data,true);
+		$kriteria = $this->kriteria_model->get_kriteria();
+		$data_kriteria[0] = '-- pilih kriteria --';
+		foreach($kriteria->result() as $row)
+		{
+			$data_kriteria[$row->KRITERIA_ID] = $row->NAMA_KRITERIA;
+		}
+		$data['kriteria'] =  $data_kriteria;
+		$data['content'] = $this->load->view('form_perhitungan_subkriteria',$data,true);
 		$this->load->view('main',$data);
+	}
+	
+	public function process0()
+	{
+		if($this->cek_validasi())
+		{
+			$kriteria_id = $this->input->post('kriteria');
+			$data['jumlah_subkriteria'] = $this->ahp_subkriteria_model->get_jumlah_subkriteria($kriteria_id);
+			$data['result_subkriteria'] = $this->ahp_subkriteria_model->get_subkriteria($kriteria_id)->result();
+			$data['bobot'] = array(
+								0 => 'bobot',
+								1 => '1',
+								2 => '2',
+								3 => '3',
+								4 => '4',
+								5 => '5'
+								);
+								//echo $data['jumlah_subkriteria']; 
+			$data['kriteria_id'] = $kriteria_id; 
+			$data['content'] = $this->load->view('tabel_perbandingan_subkriteria',$data,true);
+			$this->load->view('main',$data);
+		}
+		else
+		{
+			$this->index();
+		}
 	}
 	
 	function cek_validasi()
@@ -43,6 +67,7 @@ class Ahp_subkriteria extends CI_Controller {
 		{
 			$this->form_validation->set_rules('bobot'.$i, 'Bobot '.$i, 'callback_cek_dropdown');
 		}
+		$this->form_validation->set_rules('kriteria', 'Kriteria', 'callback_cek_dropdown');
 		
 		$this->form_validation->set_error_delimiters('<div class="error_box">', '</div>');
 		$this->form_validation->set_message('required', 'Kolom %s harus diisi !!');
@@ -64,7 +89,7 @@ class Ahp_subkriteria extends CI_Controller {
 		if($this->cek_validasi())
 		{
 			//mendapatkan jumlah kriteria pada tabel subkriteria
-			$jumlah_subkriteria = $this->ahp_subkriteria_model->get_jumlah_subkriteria();
+			$jumlah_subkriteria = $this->ahp_subkriteria_model->get_jumlah_subkriteria($this->input->post('kriteria_id'));
 			$arrray1 = array();
 			$k = 0;
 			$l = 0;

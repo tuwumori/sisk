@@ -55,9 +55,11 @@ class Kriteria_model extends CI_Model {
 		return $this->db->get();
 	}
 	
-	function get_absensi_kehadiran($date_start, $date_end)
+	function get_max_kriteria_id()
 	{
-		return $this->db->query('SELECT * FROM absensi JOIN pegawai ON pegawai.ID = absensi.ID WHERE KODE_ABSENSI = 1 AND TANGGAL_ABSENSI BETWEEN "'.$date_start.'" AND "'.$date_end.'" ORDER BY TANGGAL_ABSENSI');
+		$this->db->select_max('kriteria_id');
+		$query = $this->db->get('kriteria');
+		return $query;
 	}
 	
 	function get_absensi_ketidakhadiran($date_start, $date_end)

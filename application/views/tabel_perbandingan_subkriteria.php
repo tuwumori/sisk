@@ -9,8 +9,9 @@
 			$id_subkriteria[$i] = $row->SUBKRITERIA_ID;  
 			$i++;
 		}
+		$id_subkriteria['kriteria_id'] = $kriteria_id;
 	?>
-	<?php echo form_open('ahp_subkriteria/process1', 'class ="niceform"',$id_subkriteria);?>						
+	<?php echo form_open('ahp_subkriteria/process1', 'class ="niceform"',$id_subkriteria);?>					
 	<table id="rounded-corner" summary="2007 Major IT Companies' Profit">
     <thead>
     	<tr>

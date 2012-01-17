@@ -31,6 +31,7 @@ class Master_kriteria extends CI_Controller {
 		$colModel['no'] = array('No',20,TRUE,'center',0);
 		$colModel['nama_kriteria'] = array('Nama Kriteria',150,TRUE,'center',1);
 		$colModel['prioritas_kriteria'] = array('Prioritas',100,TRUE,'center',1);
+		$colModel['subkriteria'] = array('Subkriteria',60,FALSE,'center',0);
 		$colModel['ubah'] = array('Ubah',30,FALSE,'center',0);
 		$colModel['hapus'] = array('Hapus',30,FALSE,'center',0);
 			
@@ -83,6 +84,7 @@ class Master_kriteria extends CI_Controller {
 										$no,
 										$row->NAMA_KRITERIA,
 										$row->PRIORITAS_KRITERIA,
+								'<a href='.base_url().'index.php/master_subkriteria/grid/'.$row->KRITERIA_ID.'><img border=\'0\' src=\''.base_url().'images/icon/doc.png\'></a>',
 								'<a href='.base_url().'index.php/master_kriteria/edit/'.$row->KRITERIA_ID.'><img border=\'0\' src=\''.base_url().'images/flexigrid/magnifier.png\'></a>',
 								'<a href='.base_url().'index.php/master_kriteria/delete/'.$row->KRITERIA_ID.' onclick="return confirm(\'Are you sure you want to delete?\')"><img border=\'0\' src=\''.base_url().'images/flexigrid/2.png\'></a>'
 								);

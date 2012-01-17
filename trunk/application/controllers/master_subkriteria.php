@@ -21,12 +21,13 @@ class Master_subkriteria extends CI_Controller {
 		}
 	}
 	
-	public function index()
+	/*
+	public function index($kriteria_id)
 	{
-		$this->grid();
-	}
+		$this->grid($kriteria_id);
+	}*/
 	
-	public function grid()
+	public function grid($kriteria_id)
 	{
 		//$kode_role = $this->session->userdata('kode_role');
 		$colModel['no'] = array('No',20,TRUE,'center',0);
@@ -52,18 +53,21 @@ class Master_subkriteria extends CI_Controller {
 		//menambah tombol pada flexigrid top toolbar
 		$buttons[] = array('Tambah','add','spt_js');
 		$buttons[] = array('separator');
+		$buttons[] = array('Kembali ke master kriteria','kembali','spt_js');
 		
 				
 		// mengambil data dari file controler ajax pada method grid_user		
-		$url = site_url()."/master_subkriteria/grid_data_subkriteria";
+		$url = site_url()."/master_subkriteria/grid_data_subkriteria/".$kriteria_id;
 		$grid_js = build_grid_js('user',$url,$colModel,'ID','asc',$gridParams,$buttons);
 		$data['js_grid'] = $grid_js;
 		$data['added_js'] = 
 		"<script type='text/javascript'>
 		function spt_js(com,grid){	
 			if (com=='Tambah'){
-				location.href= '".base_url()."index.php/master_subkriteria/add';    
-			}	
+				location.href= '".base_url()."index.php/master_subkriteria/add/".$kriteria_id."';    
+			}else if (com=='Kembali ke master kriteria'){
+				location.href= '".base_url()."index.php/master_kriteria';    
+			}
 		} </script>";
 			
 		//$data['added_js'] variabel untuk membungkus javascript yang dipakai pada tombol yang ada di toolbar atas
@@ -71,11 +75,11 @@ class Master_subkriteria extends CI_Controller {
 		$this->load->view('main',$data);
 	}
 	
-	function grid_data_subkriteria() 
+	function grid_data_subkriteria($kriteria_id) 
 	{
-		$valid_fields = array('SUBKRITERIA_ID','NAMA_SUBKRITERIA','NAMA_KRITERIA');
+		$valid_fields = array('SUBKRITERIA_ID','NAMA_SUBKRITERIA','NAMA_KRITERIA','PRIORITAS_SUBKRITERIA');
 		$this->flexigrid->validate_post('SUBKRITERIA_ID','asc',$valid_fields);
-		$records = $this->subkriteria_model->get_data_flexigrid();
+		$records = $this->subkriteria_model->get_data_flexigrid($kriteria_id);
 		$this->output->set_header($this->config->item('json_header'));
 			
 		$no = 0;
@@ -88,7 +92,7 @@ class Master_subkriteria extends CI_Controller {
 										$row->NAMA_KRITERIA,
 										$row->PRIORITAS_SUBKRITERIA,
 										$row->BOBOT,
-								'<a href='.base_url().'index.php/master_subkriteria/edit/'.$row->SUBKRITERIA_ID.'><img border=\'0\' src=\''.base_url().'images/flexigrid/magnifier.png\'></a>',
+								'<a href='.base_url().'index.php/master_subkriteria/edit/'.$row->SUBKRITERIA_ID.'/'.$kriteria_id.'><img border=\'0\' src=\''.base_url().'images/flexigrid/magnifier.png\'></a>',
 								'<a href='.base_url().'index.php/master_subkriteria/delete/'.$row->SUBKRITERIA_ID.' onclick="return confirm(\'Are you sure you want to delete?\')"><img border=\'0\' src=\''.base_url().'images/flexigrid/2.png\'></a>'
 								);
 		}
@@ -108,13 +112,14 @@ class Master_subkriteria extends CI_Controller {
 		return $this->form_validation->run();
 	}
 	
-	public function add()
+	public function add($kriteria_id)
 	{
 		$kriteria = $this->kriteria_model->get_kriteria();
 		foreach($kriteria->result() as $row)
 		{
 			$data_kriteria[$row->KRITERIA_ID] = $row->NAMA_KRITERIA;
 		}
+		$data['kriteria_id'] =  $kriteria_id;
 		$data['kriteria'] =  $data_kriteria;
 		$data['content'] = $this->load->view('form_add_master_subkriteria',$data,true);
 		$this->load->view('main',$data);
@@ -139,7 +144,7 @@ class Master_subkriteria extends CI_Controller {
 		}
 	}
 	
-	public function edit($subkriteria_id)
+	public function edit($subkriteria_id, $kriteria_id)
 	{
 		$data = array(
 					'nama_subkriteria' => $this->input->post('subkriteria'),
@@ -158,6 +163,7 @@ class Master_subkriteria extends CI_Controller {
 			{
 				$data_kriteria[$row->KRITERIA_ID] = $row->NAMA_KRITERIA;
 			}
+			$data['kriteria_id'] =  $kriteria_id;
 			$data['kriteria'] =  $data_kriteria;
 			$data['kriteria_dipilih'] = $this->subkriteria_model->get_subkriteria_by_id($subkriteria_id)->row()->KRITERIA_ID;;
 			$data['subkriteria'] = $this->subkriteria_model->get_subkriteria_by_id($subkriteria_id)->row()->NAMA_SUBKRITERIA;

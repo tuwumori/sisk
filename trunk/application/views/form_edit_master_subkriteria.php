@@ -3,7 +3,7 @@
 	<div>
 	<?php echo validation_errors(); ?>
 	<?php echo form_open(uri_string(), 'class ="niceform"');?>						
-				<a href="<?php echo base_url()?>index.php/master_subkriteria">Kembali ke master subkriteria</a>
+				<a href="<?php echo base_url()?>index.php/master_subkriteria/grid/<?php echo $kriteria_id;?>">Kembali ke master subkriteria</a>
                     <dl>
                         <dt><label for="role">Kriteria : </label></dt>
                         <dd>

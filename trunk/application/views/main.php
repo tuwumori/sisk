@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Aplikasi Arus Kas</title>
+<title>Sistem Perekrutan Karyawan</title>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>css/style.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>css/datepicker.css" media="screen, tv, projection" title="Default" />	
 <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>css/flexigrid.css" media="screen, tv, projection" title="Default" />
@@ -93,7 +93,7 @@ ddaccordion.init({
                 <div class="submenu">
                     <ul>
                     <li><a href="<?php echo base_url() ?>index.php/master_kriteria">Kriteria</a></li>
-                    <li><a href="<?php echo base_url() ?>index.php/master_subkriteria">Subkriteria</a></li>
+                    
                     </ul>
                 </div>
                 <a class="menuitem submenuheader" href="">Penghitungan</a>

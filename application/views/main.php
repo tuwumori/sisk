@@ -95,7 +95,7 @@ ddaccordion.init({
 					<li><a href="<?php echo base_url() ?>index.php/master_bagian">Bagian</a></li>
                     <li><a href="<?php echo base_url() ?>index.php/master_kriteria">Kriteria</a></li>
 					<li><a href="<?php echo base_url() ?>index.php/master_pertanyaan">Pertanyaan</a></li>
-                    <li><a href="<?php echo base_url() ?>index.php/master_subkriteria">Subkriteria</a></li>
+                    
                     </ul>
                 </div>
                 <a class="menuitem submenuheader" href="">Penghitungan</a>

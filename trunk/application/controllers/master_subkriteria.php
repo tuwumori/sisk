@@ -9,6 +9,7 @@ class Master_subkriteria extends CI_Controller {
 		$this->load->helper('flexigrid');
 		$this->load->model('subkriteria_model');
 		$this->load->model('kriteria_model');
+		$this->load->model('ahp_subkriteria_model');
 		//$this->cek_session();
 	}
 	
@@ -51,8 +52,12 @@ class Master_subkriteria extends CI_Controller {
 							);
 							
 		//menambah tombol pada flexigrid top toolbar
-		$buttons[] = array('Tambah','add','spt_js');
-		$buttons[] = array('separator');
+		$jumlah_subkriteria = $this->ahp_subkriteria_model->get_jumlah_subkriteria($kriteria_id);
+		if($jumlah_subkriteria < 5)
+		{
+			$buttons[] = array('Tambah','add','spt_js');
+			$buttons[] = array('separator');
+		}
 		$buttons[] = array('Kembali ke master kriteria','kembali','spt_js');
 		
 				

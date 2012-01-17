@@ -1,6 +1,9 @@
 <script type="text/javascript" src="<?php echo base_url() ?>js/niceforms.js"></script>
-<h2>Prioritas Subkriteria</h2>
+<h2>Prioritas Subkriteria dari Kriteria <?php echo $nama_kriteria;?></h2>
+
+
 <div>
+	<a href="<?php echo base_url()?>index.php/ahp_subkriteria">Kembali<br /></a>
 	<?php 
 		echo validation_errors(); 
 		$i = 0;
@@ -11,7 +14,8 @@
 		}
 		$id_subkriteria['kriteria_id'] = $kriteria_id;
 	?>
-	<?php echo form_open('ahp_subkriteria/process1', 'class ="niceform"',$id_subkriteria);?>					
+	<?php echo form_open('ahp_subkriteria/process1', 'class ="niceform"',$id_subkriteria);?>
+	<br />				
 	<table id="rounded-corner" summary="2007 Major IT Companies' Profit">
     <thead>
     	<tr>

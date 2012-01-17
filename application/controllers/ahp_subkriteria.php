@@ -40,6 +40,7 @@ class Ahp_subkriteria extends CI_Controller {
 		if($this->cek_validasi())
 		{
 			$kriteria_id = $this->input->post('kriteria');
+			$nama_kriteria = $this->kriteria_model->get_kriteria_by_id($kriteria_id)->row()->NAMA_KRITERIA;
 			$data['jumlah_subkriteria'] = $this->ahp_subkriteria_model->get_jumlah_subkriteria($kriteria_id);
 			$data['result_subkriteria'] = $this->ahp_subkriteria_model->get_subkriteria($kriteria_id)->result();
 			$data['bobot'] = array(
@@ -51,6 +52,7 @@ class Ahp_subkriteria extends CI_Controller {
 								5 => '5'
 								);
 								//echo $data['jumlah_subkriteria']; 
+			$data['nama_kriteria'] = $nama_kriteria; 
 			$data['kriteria_id'] = $kriteria_id; 
 			$data['content'] = $this->load->view('tabel_perbandingan_subkriteria',$data,true);
 			$this->load->view('main',$data);

@@ -86,7 +86,7 @@ class Ahp_subkriteria extends CI_Controller {
 		}
 	}
 	
-	function process1()
+	function process1($kriteria_id)
 	{
 		if($this->cek_validasi())
 		{
@@ -215,7 +215,7 @@ class Ahp_subkriteria extends CI_Controller {
 				echo 'subprioritas ['.$v.'] => '.$prioritas[$v].' / '.$prioritas_max.' = '.$subprioritas[$v];
 				echo '<br />';
 			}
-			redirect('master_subkriteria');
+			redirect('master_subkriteria/grid/'.$kriteria_id);
 		}
 		else
 		{

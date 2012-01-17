@@ -14,7 +14,7 @@
 		}
 		$id_subkriteria['kriteria_id'] = $kriteria_id;
 	?>
-	<?php echo form_open('ahp_subkriteria/process1', 'class ="niceform"',$id_subkriteria);?>
+	<?php echo form_open('ahp_subkriteria/process1/'.$kriteria_id, 'class ="niceform"',$id_subkriteria);?>
 	<br />				
 	<table id="rounded-corner" summary="2007 Major IT Companies' Profit">
     <thead>

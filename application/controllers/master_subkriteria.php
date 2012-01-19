@@ -151,6 +151,23 @@ class Master_subkriteria extends CI_Controller {
 	
 	public function edit($subkriteria_id, $kriteria_id)
 	{
+		$kriteria = $this->kriteria_model->get_kriteria();
+		foreach($kriteria->result() as $row)
+		{
+			$data_kriteria[$row->KRITERIA_ID] = $row->NAMA_KRITERIA;
+		}
+		$data['kriteria_id'] =  $kriteria_id;
+		$data['subkriteria_id'] =  $subkriteria_id;
+		$data['kriteria'] =  $data_kriteria;
+		$data['kriteria_dipilih'] = $this->subkriteria_model->get_subkriteria_by_id($subkriteria_id)->row()->KRITERIA_ID;;
+		$data['subkriteria'] = $this->subkriteria_model->get_subkriteria_by_id($subkriteria_id)->row()->NAMA_SUBKRITERIA;
+		$data['bobot'] = $this->subkriteria_model->get_subkriteria_by_id($subkriteria_id)->row()->BOBOT;
+		$data['content'] = $this->load->view('form_edit_master_subkriteria',$data,true);
+		$this->load->view('main',$data);
+	}
+	
+	public function edit_proses($subkriteria_id, $kriteria_id)
+	{
 		$data = array(
 					'nama_subkriteria' => $this->input->post('subkriteria'),
 					'kriteria_id' => $this->input->post('kriteria'),
@@ -159,22 +176,21 @@ class Master_subkriteria extends CI_Controller {
 		if($this->cek_validasi())
 		{
 			$this->subkriteria_model->update($subkriteria_id, $data);
-			redirect('master_subkriteria');
+			//redirect('master_subkriteria');
+			echo '<script type="text/javascript">$(".error_box").remove();</script><div class="valid_box">saved</div>';
 		}
 		else
 		{
-			$kriteria = $this->kriteria_model->get_kriteria();
-			foreach($kriteria->result() as $row)
-			{
-				$data_kriteria[$row->KRITERIA_ID] = $row->NAMA_KRITERIA;
-			}
-			$data['kriteria_id'] =  $kriteria_id;
-			$data['kriteria'] =  $data_kriteria;
 			$data['kriteria_dipilih'] = $this->subkriteria_model->get_subkriteria_by_id($subkriteria_id)->row()->KRITERIA_ID;;
 			$data['subkriteria'] = $this->subkriteria_model->get_subkriteria_by_id($subkriteria_id)->row()->NAMA_SUBKRITERIA;
 			$data['bobot'] = $this->subkriteria_model->get_subkriteria_by_id($subkriteria_id)->row()->BOBOT;
-			$data['content'] = $this->load->view('form_edit_master_subkriteria',$data,true);
-			$this->load->view('main',$data);
+			
+			echo validation_errors().'<script type="text/javascript">
+				$("#kriteria").val("'.$data['kriteria_dipilih'].'");
+				$("#subkriteria").val("'.$data['subkriteria'].'");
+				$("#bobot").val("'.$data['bobot'].'");
+				$(".valid_box").remove();
+			</script>';
 		}
 	}
 	

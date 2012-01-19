@@ -17,6 +17,7 @@
 <script type="text/javascript" src="<?php echo base_url() ?>form_attribute/view.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>form_attribute/calendar.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>js/datepicker.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>js/functions.js"></script>
 
 
 <script type="text/javascript">

@@ -130,19 +130,35 @@ class Master_kriteria extends CI_Controller {
 	
 	public function edit($kriteria_id)
 	{
+		$data['kriteria_id'] = $kriteria_id;
+		$data['kriteria'] = $this->kriteria_model->get_kriteria_by_id($kriteria_id)->row()->NAMA_KRITERIA;
+		$data['content'] = $this->load->view('form_edit_master_kriteria',$data,true);
+		$this->load->view('main',$data);
+	}
+	
+	public function edit_proses($kriteria_id)
+	{
 		$data = array(
 					'nama_kriteria' => $this->input->post('kriteria')
 				);
 		if($this->cek_validasi())
 		{
 			$this->kriteria_model->update($kriteria_id, $data);
-			redirect('master_kriteria');
+			//redirect('master_kriteria');
+			echo '<script type="text/javascript">
+			$(".error_box").remove();
+			</script>
+			<div class="valid_box">saved</div>';
 		}
 		else
 		{
 			$data['kriteria'] = $this->kriteria_model->get_kriteria_by_id($kriteria_id)->row()->NAMA_KRITERIA;
-			$data['content'] = $this->load->view('form_edit_master_kriteria',$data,true);
-			$this->load->view('main',$data);
+			//$this->load->view('form_edit_master_kriteria',$data,true);
+			//$this->load->view('main',$data);
+			echo validation_errors().'<script type="text/javascript">
+			$("#kriteria").val("'.$data['kriteria'].'");
+			$(".valid_box").remove();
+			</script>';
 		}
 	}
 	

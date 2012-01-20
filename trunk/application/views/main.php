@@ -75,7 +75,7 @@ ddaccordion.init({
 	<div class="header">
     <div class="logo"><a href="#"><img src="images/logo.gif" alt="" title="" border="0" /></a></div>
     
-    <div class="right_header">Welcome <?php echo $this->session->userdata('username'); ?> | <a href="<?php echo base_url() ?>index.php/login/log_out" class="logout">Logout</a></div>
+    <div class="right_header">Welcome <?php echo $this->session->userdata('username'); ?> | <a href="<?php echo base_url() ?>index.php/user_menu/logout" class="logout">Logout</a></div>
     </div>
     
     <div class="main_content">
@@ -97,6 +97,7 @@ ddaccordion.init({
                     <li><a href="<?php echo base_url() ?>index.php/master_kriteria">Kriteria</a></li>
 					<li><a href="<?php echo base_url() ?>index.php/master_pertanyaan">Pertanyaan</a></li>
                     
+					<li><a href="<?php echo base_url() ?>index.php/master_pengguna">Pengguna</a></li>
                     </ul>
                 </div>
                 <a class="menuitem submenuheader" href="">Penghitungan</a>
@@ -106,11 +107,21 @@ ddaccordion.init({
                     <li><a href="<?php echo base_url() ?>index.php/ahp_subkriteria">Subkriteria</a></li>
                     </ul>
                 </div>
+				<a class="menuitem submenuheader" href="" >Pengelolaan Calon Pegawai</a>
+                <div class="submenu">
+                    <ul>
+					<li><a href="<?php echo base_url() ?>index.php/login/log_out">Daftar Calon Pegawai</a></li>
+					<li><a href="<?php echo base_url() ?>index.php/login/log_out">Calon Pegawai Bagian Customer</a></li>
+					<li><a href="<?php echo base_url() ?>index.php/login/log_out">Calon Pegawai Bagian Produksi</a></li>
+					<li><a href="<?php echo base_url() ?>index.php/login/log_out">Calon Pegawai Bagian Marketing</a></li>
+					<li><a href="<?php echo base_url() ?>index.php/login/log_out">Calon Pegawai Gagal</a></li>
+                    </ul>
+                </div> 
                 <a class="menuitem submenuheader" href="" >User Menu</a>
                 <div class="submenu">
                     <ul>
-                    <?php if($manajemen_pengguna) { ?><li><a href="<?php echo base_url() ?>index.php/manajemen_user">Manajemen User</a></li><?php } ?>
-                    <li><a href="<?php echo base_url() ?>index.php/login/log_out">Logout</a></li>
+					<li><a href="<?php echo base_url() ?>index.php/user_menu/index">Data User</a></li>
+                    <li><a href="<?php echo base_url() ?>index.php/user_menu/logout">Logout</a></li>
                     </ul>
                 </div>                    
             </div>  

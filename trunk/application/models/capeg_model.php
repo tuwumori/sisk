@@ -1,0 +1,118 @@
+<?php
+class Capeg_model extends CI_Model {
+	
+	function __construct()
+	{
+		parent::__construct();
+		$this->load->database();
+		$this->CI = get_instance();
+	}
+	
+	function add($data)
+	{
+		$this->db->insert('calon_pegawai',$data);
+		$this->db->select_max('CAPEG_ID');
+		$result = $this->db->get('calon_pegawai')->row();
+		return $result;
+	}
+	
+	function add_pertanyaan_perpeg($data){
+		$this->db->insert('nilai_pegawai_per_pertanyaan', $data);
+	}
+	
+	function get_data_flexigrid()
+	{
+		$this->db->select('*')->from('calon_pegawai');
+			
+		$this->CI->flexigrid->build_query();		
+		$return['records'] = $this->db->get();
+		
+		$this->db->select('*')->from('calon_pegawai');
+		
+		$this->CI->flexigrid->build_query(FALSE);
+		$return['record_count'] = $this->db->count_all_results();
+		return $return;
+	}
+	
+	function update($capeg_id, $data)
+	{
+		$this->db->where('CAPEG_ID',$capeg_id)->update('calon_pegawai', $data);
+	}
+	
+	function get_capeg_by_id($capeg_id)
+	{
+		$this->db->select('*');
+		$this->db->from('calon_pegawai');
+		$this->db->where('CAPEG_ID',$capeg_id);
+		return $this->db->get();
+	}
+	
+	function delete($id)
+	{
+		$this->db->delete('calon_pegawai', array('CAPEG_ID' => $id)); 
+	}
+	
+	function get_pertanyaan($capeg_id, $bagian, $kriteria){
+		$this->db->select('*');
+		$this->db->from('nilai_pegawai_per_pertanyaan');
+		$this->db->join('pertanyaan', 'nilai_pegawai_per_pertanyaan.PERTANYAAN_ID = pertanyaan.PERTANYAAN_ID');
+		$this->db->join('kriteria', 'pertanyaan.KRITERIA_ID = kriteria.KRITERIA_ID'); 		
+		$this->db->join('bagian', 'pertanyaan.BAGIAN_ID = bagian.BAGIAN_ID');
+		$this->db->where('CAPEG_ID', $capeg_id);
+		$this->db->where('NAMA_KRITERIA', $kriteria);
+		$this->db->where('NAMA_BAGIAN', $bagian);
+		return $this->db->get();
+	}
+	
+	function get_pertanyaan($capeg_id, $bagian){
+		$this->db->select('*');
+		$this->db->from('nilai_pegawai_per_pertanyaan');
+		$this->db->join('pertanyaan', 'nilai_pegawai_per_pertanyaan.PERTANYAAN_ID = pertanyaan.PERTANYAAN_ID');
+		$this->db->join('kriteria', 'pertanyaan.KRITERIA_ID = kriteria.KRITERIA_ID'); 		
+		$this->db->join('bagian', 'pertanyaan.BAGIAN_ID = bagian.BAGIAN_ID');
+		$this->db->where('CAPEG_ID', $capeg_id);
+		$this->db->where('NAMA_KRITERIA', 'tes psikologi');
+		$this->db->where('NAMA_BAGIAN', $bagian);
+		return $this->db->get();
+	}
+	
+	function get_tes_akademik($capeg_id, $bagian){
+		$this->db->select('*');
+		$this->db->from('nilai_pegawai_per_pertanyaan');
+		$this->db->join('pertanyaan', 'nilai_pegawai_per_pertanyaan.PERTANYAAN_ID = pertanyaan.PERTANYAAN_ID');
+		$this->db->join('kriteria', 'pertanyaan.KRITERIA_ID = kriteria.KRITERIA_ID'); 
+		$this->db->where('CAPEG_ID', $capeg_id);
+		$this->db->where('NAMA_KRITERIA', 'tes akademik');
+		return $this->db->get();
+	}
+	
+	function get_tes_kepribadian($capeg_id, $bagian){
+		$this->db->select('*');
+		$this->db->from('nilai_pegawai_per_pertanyaan');
+		$this->db->join('pertanyaan', 'nilai_pegawai_per_pertanyaan.PERTANYAAN_ID = pertanyaan.PERTANYAAN_ID');
+		$this->db->join('kriteria', 'pertanyaan.KRITERIA_ID = kriteria.KRITERIA_ID'); 
+		$this->db->where('CAPEG_ID', $capeg_id);
+		$this->db->where('NAMA_KRITERIA', 'tes kepribadian');
+		return $this->db->get();
+	}
+	
+	function get_tes_wawancara($capeg_id, $bagian){
+		$this->db->select('*');
+		$this->db->from('nilai_pegawai_per_pertanyaan');
+		$this->db->join('pertanyaan', 'nilai_pegawai_per_pertanyaan.PERTANYAAN_ID = pertanyaan.PERTANYAAN_ID');
+		$this->db->join('kriteria', 'pertanyaan.KRITERIA_ID = kriteria.KRITERIA_ID'); 
+		$this->db->where('CAPEG_ID', $capeg_id);
+		$this->db->where('NAMA_KRITERIA', 'tes wawancara');
+		return $this->db->get();
+	}
+	
+	function get_tes_pengetahuan($capeg_id, $bagian){
+		$this->db->select('*');
+		$this->db->from('nilai_pegawai_per_pertanyaan');
+		$this->db->join('pertanyaan', 'nilai_pegawai_per_pertanyaan.PERTANYAAN_ID = pertanyaan.PERTANYAAN_ID');
+		$this->db->join('kriteria', 'pertanyaan.KRITERIA_ID = kriteria.KRITERIA_ID'); 
+		$this->db->where('CAPEG_ID', $capeg_id);
+		$this->db->where('NAMA_KRITERIA', 'tes pengetahuan');
+		return $this->db->get();
+	}
+}

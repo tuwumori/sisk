@@ -37,7 +37,7 @@
 	var closeImageHeight = 8;	// Pixel height of close buttons
 	var closeImageWidth = 8;	// Pixel height of close buttons
 	
-	var base_url = "http://localhost/pendataan_dikti/";
+	var base_url = "http://localhost/sisk/";
 	
 	
 	function setPadding(obj,padding){

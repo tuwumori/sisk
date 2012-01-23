@@ -1566,9 +1566,9 @@ class Pengelolaan_capeg extends CI_Controller {
 							}
 					}
 					
-					$data_status = array{
+					$data_status = array(
 										'STATUS_PEGAWAI' => $status_peg
-									};
+									);
 					
 					$this->capeg_model->update($capeg_id, $data_status);
 					

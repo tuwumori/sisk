@@ -7,7 +7,7 @@ class Ahp_kriteria extends CI_Controller {
 		parent::__construct();
 		$this->load->model('ahp_kriteria_model');
 		$this->load->model('kriteria_model');
-		//$this->cek_session();
+		$this->cek_session();
 	}
 	
 	function cek_session()

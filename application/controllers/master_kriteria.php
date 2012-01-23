@@ -8,7 +8,7 @@ class Master_kriteria extends CI_Controller {
 		$this->load->library('flexigrid');	
 		$this->load->helper('flexigrid');
 		$this->load->model('kriteria_model');
-		//$this->cek_session();
+		$this->cek_session();
 	}
 	
 	function cek_session()

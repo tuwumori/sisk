@@ -2,7 +2,7 @@
 	<h2>Tambah Calon Pegawai</h2>
 	<div>
 	<?php echo validation_errors(); ?>
-	<?php echo form_open('calon_pegawai/add_process', 'class ="niceform"');?>						
+	<?php echo form_open('pengelolaan_capeg/add_process', 'class ="niceform"');?>						
 				<a href="<?php echo base_url()?>index.php/pengelolaan_capeg">Kembali ke daftar calon pegawai</a>
                     <dl>
                         <dt><label for="nama_capeg">NAMA CALON PEGAWAI : </label></dt>

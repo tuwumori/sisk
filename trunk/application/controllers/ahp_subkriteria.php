@@ -10,7 +10,7 @@ class Ahp_subkriteria extends CI_Controller {
 		$this->load->model('subkriteria_model');
 		$this->load->model('ahp_subkriteria_model');
 		$this->load->model('kriteria_model');
-		//$this->cek_session();
+		$this->cek_session();
 	}
 	
 	function cek_session()

@@ -111,10 +111,6 @@ ddaccordion.init({
                 <div class="submenu">
                     <ul>
 					<li><a href="<?php echo base_url() ?>index.php/login/log_out">Daftar Calon Pegawai</a></li>
-					<li><a href="<?php echo base_url() ?>index.php/login/log_out">Calon Pegawai Bagian Customer</a></li>
-					<li><a href="<?php echo base_url() ?>index.php/login/log_out">Calon Pegawai Bagian Produksi</a></li>
-					<li><a href="<?php echo base_url() ?>index.php/login/log_out">Calon Pegawai Bagian Marketing</a></li>
-					<li><a href="<?php echo base_url() ?>index.php/login/log_out">Calon Pegawai Gagal</a></li>
                     </ul>
                 </div> 
                 <a class="menuitem submenuheader" href="" >User Menu</a>

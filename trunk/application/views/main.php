@@ -59,13 +59,13 @@ ddaccordion.init({
 		<?if (isset($added_js_4)){echo $added_js_4;}?> <!-- attach js flexigrid (jika ada) -->
 		<?if (isset($added_js_5)){echo $added_js_5;}?> <!-- attach js flexigrid (jika ada) -->
 		<?php
-			$tambah_aruskas = false;
-			$manajemen_pengguna = false;
+			$master = false;
+			$penghitungan = false;
 			$this->load->library('session');
 			$kode_role = $this->session->userdata('kode_role');
 			if($kode_role == 1 ){	//untuk role admin
-				$tambah_aruskas = true;
-				$manajemen_pengguna = true;
+				$master = true;
+				$penghitungan = true;
 			}
 		?>
 </head>
@@ -90,7 +90,7 @@ ddaccordion.init({
 
             <div class="sidebarmenu">
 				<a class="menuitem" href="<?php echo base_url() ?>index.php/home">Halaman Utama</a>
-                <a class="menuitem submenuheader" href="">Master</a>
+                <?php if($master) { ?><a class="menuitem submenuheader" href="">Master</a>
                 <div class="submenu">
                     <ul>
 					<li><a href="<?php echo base_url() ?>index.php/master_bagian">Bagian</a></li>
@@ -99,14 +99,14 @@ ddaccordion.init({
                     
 					<li><a href="<?php echo base_url() ?>index.php/master_pengguna">Pengguna</a></li>
                     </ul>
-                </div>
-                <a class="menuitem submenuheader" href="">Penghitungan</a>
+                </div><?php } ?>
+                <?php if($penghitungan) { ?><a class="menuitem submenuheader" href="">Penghitungan</a>
                 <div class="submenu">
                     <ul>
                     <li><a href="<?php echo base_url() ?>index.php/ahp_kriteria">Kriteria</a></li>
                     <li><a href="<?php echo base_url() ?>index.php/ahp_subkriteria">Subkriteria</a></li>
                     </ul>
-                </div>
+                </div><?php } ?>
 				<a class="menuitem submenuheader" href="" >Pengelolaan Calon Pegawai</a>
                 <div class="submenu">
                     <ul>

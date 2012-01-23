@@ -14,6 +14,12 @@ class Login extends CI_Controller {
 		$this->load->view('login');
 	}
 	
+	function login_ulang()
+	{
+		echo "<script> alert('Maaf, Anda tidak punya hak untuk mengakses halaman ini. Silakan login terlebih dahulu !!');</script>";	
+		$this->index();
+	}
+	
 	function check_login()
 	{
 		
@@ -24,7 +30,7 @@ class Login extends CI_Controller {
 		
 		//cek apakah username dan password sudah diisikan dengan benar
 		if ($this->form_validation->run()){
-					redirect ('ahp_kriteria'); //true gak bisa tapi false kok bisa ??/ //			
+					redirect ('home'); //true gak bisa tapi false kok bisa ??/ //			
 		}//end validation
 		else{
 			$this->index();

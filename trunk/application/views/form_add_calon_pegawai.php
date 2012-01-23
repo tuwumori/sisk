@@ -3,7 +3,7 @@
 	<div>
 	<?php echo validation_errors(); ?>
 	<?php echo form_open('calon_pegawai/add_process', 'class ="niceform"');?>						
-				<a href="<?php echo base_url()?>index.php/calon_pegawai">Kembali ke daftar calon pegawai</a>
+				<a href="<?php echo base_url()?>index.php/pengelolaan_capeg">Kembali ke daftar calon pegawai</a>
                     <dl>
                         <dt><label for="nama_capeg">NAMA CALON PEGAWAI : </label></dt>
                         <?php $nama_capeg = ''; if(set_value('nama_capeg')!='') $nama_capeg = set_value('nama_capeg')?>

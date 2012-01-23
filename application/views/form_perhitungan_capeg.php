@@ -5,8 +5,9 @@
 	<h2>Edit Calon Pegawai</h2>
 	<div>
 	<?php echo validation_errors(); ?>
-	<?php echo form_open(uri_string(), 'class ="niceform"');?>						
-				<a href="<?php echo base_url()?>index.php/calon_pegawai">Kembali ke daftar calon pegawai</a>
+	<?php echo form_open(uri_string(), 'class ="niceform"');?>	
+		<?php echo form_hidden('hitung',$hitung); ?>
+				<a href="<?php echo base_url()?>index.php/pengelolaan_capeg">Kembali ke daftar calon pegawai</a>
                     <dl>
                         <dt><label for="nama_capeg">NAMA CALON PEGAWAI : </label></dt>
 						<dd><label for="nama_capeg"><?php if($nama){ echo $nama; } else { echo '-'; } ?></dd>

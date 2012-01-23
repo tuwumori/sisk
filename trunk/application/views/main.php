@@ -73,7 +73,7 @@ ddaccordion.init({
 <div id="main_container">
 
 	<div class="header">
-    <div class="logo"><a href="#"><img src="images/logo.gif" alt="" title="" border="0" /></a></div>
+    <div class="logo"><a href="<?=base_url()?>home"><img src="<?=base_url()?>images/icon/green-office-building.png" alt="" title="" border="0" /></a></div>
     
     <div class="right_header">Welcome <?php echo $this->session->userdata('username'); ?> | <a href="<?php echo base_url() ?>index.php/user_menu/logout" class="logout">Logout</a></div>
     </div>

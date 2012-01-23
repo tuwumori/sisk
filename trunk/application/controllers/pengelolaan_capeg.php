@@ -31,8 +31,8 @@ class Pengelolaan_capeg extends CI_Controller {
 		//$kode_role = $this->session->userdata('kode_role');
 		$colModel['no'] = array('No',20,TRUE,'center',0);
 		$colModel['NAMA_CAPEG'] = array('Nama Calon Pegawai',200,TRUE,'center',1);
-		$colModel['STATUS_PEGAWAI'] = array('Status Pegawai',200,TRUE,'center',1);
-		$colModel['perhitungan nilai'] = array('Ubah',30,FALSE,'center',0);
+		$colModel['STATUS_PEGAWAI'] = array('Status Pegawai',190,TRUE,'center',1);
+		$colModel['perhitungan nilai'] = array('Perhitungan Nilai',80,FALSE,'center',0);
 		$colModel['ubah'] = array('Ubah',30,FALSE,'center',0);
 		$colModel['hapus'] = array('Hapus',30,FALSE,'center',0);
 			
@@ -85,7 +85,7 @@ class Pengelolaan_capeg extends CI_Controller {
 										$no,
 										$row->NAMA_CAPEG,
 										$row->STATUS_PEGAWAI,
-										'<a href='.base_url().'index.php/pengelolaan_capeg/perhitungan/'.$row->CAPEG_ID.'><img border=\'0\' src=\''.base_url().'images/flexigrid/magnifier.png\'></a>',
+										'<a href='.base_url().'index.php/pengelolaan_capeg/perhitungan/'.$row->CAPEG_ID.'><img border=\'0\' src=\''.base_url().'images/icon/cal.gif\'></a>',
 										'<a href='.base_url().'index.php/pengelolaan_capeg/edit/'.$row->CAPEG_ID.'><img border=\'0\' src=\''.base_url().'images/flexigrid/magnifier.png\'></a>',
 										'<a href='.base_url().'index.php/pengelolaan_capeg/delete/'.$row->CAPEG_ID.' onclick="return confirm(\'Are you sure you want to delete?\')"><img border=\'0\' src=\''.base_url().'images/flexigrid/2.png\'></a>'
 								);

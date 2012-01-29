@@ -176,6 +176,10 @@ class Ahp_kriteria extends CI_Controller {
 			$alpha_max = $jumlah/$jumlah_kriteria;
 			$consistency_index = ($alpha_max - $jumlah_kriteria)/$jumlah_kriteria;
 			$consistency_ratio = $consistency_index/1.12;
+			if($consistency_ratio <= 0.1)
+				$keterangan = 'rasio konsistensi dari perhitungan dapat diterima.';
+			else
+				$keterangan = 'rasio konsistensi dari perhitungan tidak dapat diterima.';
 			//echo 'CR = '.$consistency_ratio;
 			$data['array1'] = $array1;
 			$data['jumlah_kriteria'] = $jumlah_kriteria;
@@ -186,6 +190,10 @@ class Ahp_kriteria extends CI_Controller {
 			$data['jumlah_per_baris2'] = $jumlah_per_baris2;
 			$data['jumlah_per_baris3'] = $jumlah_per_baris3;
 			$data['prioritas'] = $prioritas;
+			$data['keterangan'] = $keterangan;
+			$data['alpha_max'] = $alpha_max;
+			$data['consistency_index'] = $consistency_index;
+			$data['consistency_ratio'] = $consistency_ratio;
 			$data['content'] = $this->load->view('tampilan_hasil',$data,true);
 			$this->load->view('main',$data);
 		}

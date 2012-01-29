@@ -124,4 +124,61 @@
 			?>          	
     </tbody>
 </table>
+<center><p><h4>Rasio Konsistensi</h4></p></center>
+	<br />
+	<table id="rounded-corner" summary="2007 Major IT Companies' Profit">
+    <thead>
+    	<tr>
+			<th></th>
+			<th>Jumlah</th>
+			<th>Prioritas</th>  	
+			<th>Hasil</th>  	
+        </tr>
+    </thead>
+    <tbody>
+        <?php	
+			//for($i=0;$i<$jumlah_kriteria;$i++)
+			$i4 = 0;
+			foreach($result_kriteria as $row)
+			{
+				//$j = 0;
+				echo '<tr>';
+				echo '<td>';
+				echo $row->NAMA_KRITERIA;
+				echo '</td>';
+				
+				echo '<td>'.$jumlah_per_baris3[$i4].'</td>';
+				echo '<td>'.$prioritas[$i4].'</td>';
+				$sum = $jumlah_per_baris3[$i4] + $prioritas[$i4];
+				echo '<td>'.$sum.'</td>';
+				echo '</tr>';
+				$i4++;
+			} 
+			
+			?>          	
+    </tbody>
+</table>
+<br />
+<table id="rounded-corner" summary="2007 Major IT Companies' Profit">
+    <tbody>
+        <?php	
+			echo '<tr>';
+			echo '<td>Lamda Max :</td>';
+			echo '<td>'.$alpha_max.'</td>';
+			echo '</tr>';
+			echo '<tr>';
+			echo '<td>Rasio Index (CI) :</td>';
+			echo '<td>'.$consistency_index.'</td>';
+			echo '</tr>';
+			echo '<tr>';
+			echo '<td>Rasio Konsistensi (CR) :</td>';
+			echo '<td>'.$consistency_ratio.'</td>';
+			echo '</tr>';
+			echo '<tr>';
+			echo '<td>Keterangan :</td>';
+			echo '<td>'.$keterangan.'</td>';
+			echo '</tr>';
+			?>          	
+    </tbody>
+</table>
 </div>

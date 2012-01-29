@@ -196,23 +196,23 @@ class Pengelolaan_capeg extends CI_Controller {
 					
 					$this->capeg_model->update_perpertanyaan($row->NILAI_PEG_PERTANYAAN_ID, $data_update);
 					
-					$akademik_produksi = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Produksi', 'tes akademik')/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Produksi', 'tes akademik');
-					$psikologi_produksi = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Produksi', 'tes psikologi')/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Produksi', 'tes psikologi');
-					$kepribadian_produksi = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Produksi', 'tes kepribadian')/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Produksi', 'tes kepribadian');
-					$wawancara_produksi = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Produksi', 'tes wawancara')/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Produksi', 'tes wawancara');
-					$pengetahuan_produksi = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Produksi', 'tes pengetahuan')/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Produksi', 'tes pengetahuan');
+					$akademik_produksi = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Produksi', 'tes akademik')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Produksi', 'tes akademik');
+					$psikologi_produksi = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Produksi', 'tes psikologi')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Produksi', 'tes psikologi');
+					$kepribadian_produksi = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Produksi', 'tes kepribadian')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Produksi', 'tes kepribadian');
+					$wawancara_produksi = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Produksi', 'tes wawancara')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Produksi', 'tes wawancara');
+					$pengetahuan_produksi = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Produksi', 'tes pengetahuan')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Produksi', 'tes pengetahuan');
 				
-					$akademik_marketing = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Marketing', 'tes akademik')/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Marketing', 'tes akademik');
-					$psikologi_marketing = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Marketing', 'tes psikologi')/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Marketing', 'tes akademik');
-					$kepribadian_marketing = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Marketing', 'tes kepribadian')/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Marketing', 'tes akademik');
-					$wawancara_marketing = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Marketing', 'tes wawancara')/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Marketing', 'tes akademik');
-					$pengetahuan_marketing = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Marketing', 'tes pengetahuan')/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Marketing', 'tes akademik');
+					$akademik_marketing = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Marketing', 'tes akademik')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Marketing', 'tes akademik');
+					$psikologi_marketing = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Marketing', 'tes psikologi')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Marketing', 'tes akademik');
+					$kepribadian_marketing = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Marketing', 'tes kepribadian')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Marketing', 'tes akademik');
+					$wawancara_marketing = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Marketing', 'tes wawancara')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Marketing', 'tes akademik');
+					$pengetahuan_marketing = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Marketing', 'tes pengetahuan')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Marketing', 'tes akademik');
 					
-					$akademik_customer = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Customer', 'tes akademik')/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Customer', 'tes akademik');
-					$psikologi_customer = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Customer', 'tes psikologi')/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Customer', 'tes akademik');
-					$kepribadian_customer = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Customer', 'tes kepribadian')/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Customer', 'tes akademik');
-					$wawancara_customer = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Customer', 'tes wawancara')/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Customer', 'tes akademik');
-					$pengetahuan_customer = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Customer', 'tes pengetahuan')/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Customer', 'tes akademik');
+					$akademik_customer = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Customer', 'tes akademik')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Customer', 'tes akademik');
+					$psikologi_customer = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Customer', 'tes psikologi')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Customer', 'tes akademik');
+					$kepribadian_customer = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Customer', 'tes kepribadian')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Customer', 'tes akademik');
+					$wawancara_customer = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Customer', 'tes wawancara')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Customer', 'tes akademik');
+					$pengetahuan_customer = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Customer', 'tes pengetahuan')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Customer', 'tes akademik');
 					
 					//akademik Produksi
 					if($akademik_produksi < 40){

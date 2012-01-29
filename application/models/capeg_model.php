@@ -88,7 +88,7 @@ class Capeg_model extends CI_Model {
 	}
 	
 	function get_jumlah_pertanyaan($capeg_id, $bagian, $kriteria){
-		$this->db->select('*');
+		//$this->db->select('*');
 		$this->db->from('nilai_pegawai_per_pertanyaan');
 		$this->db->join('pertanyaan', 'nilai_pegawai_per_pertanyaan.PERTANYAAN_ID = pertanyaan.PERTANYAAN_ID');
 		$this->db->join('kriteria', 'pertanyaan.KRITERIA_ID = kriteria.KRITERIA_ID'); 		

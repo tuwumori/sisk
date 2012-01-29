@@ -107,7 +107,7 @@ class Ahp_subkriteria extends CI_Controller {
 					else
 					{
 						$array1[$i][$j] = $this->input->post('bobot'.$l);
-						$array1[$j][$i] = 1/$array1[$i][$j];
+						$array1[$j][$i] = round(1/$array1[$i][$j],2);
 						$l++;				
 					}
 				}
@@ -118,8 +118,8 @@ class Ahp_subkriteria extends CI_Controller {
 			{
 				for($q=0;$q<$jumlah_subkriteria;$q++)
 				{
-					echo '['.$p.']['.$q.'] = '.$array1[$p][$q];
-					echo '<br />';
+					//echo '['.$p.']['.$q.'] = '.$array1[$p][$q];
+					//echo '<br />';
 				}
 			}
 			//mencari jumlah setiap baris matriks perbandingan berpasangan
@@ -133,8 +133,8 @@ class Ahp_subkriteria extends CI_Controller {
 				}
 				$jumlah_per_baris[$y] = $jumlah_per_cell;
 				$jumlah_per_cell = 0;
-				echo 'jumlah baris ['.$y.'] = '.$jumlah_per_baris[$y];
-				echo '<br />';
+				//echo 'jumlah baris ['.$y.'] = '.$jumlah_per_baris[$y];
+				//echo '<br />';
 			}
 			//matriks nilai kriteria
 			$array2 = array();
@@ -142,9 +142,9 @@ class Ahp_subkriteria extends CI_Controller {
 			{
 				for($n=0;$n<$jumlah_subkriteria;$n++)
 				{				
-					$array2[$m][$n] = $array1[$m][$n]/$jumlah_per_baris[$m];
-					echo '['.$m.']['.$n.'] = '.$array2[$m][$n];
-					echo '<br />';
+					$array2[$m][$n] = round($array1[$m][$n]/$jumlah_per_baris[$m],2);
+					//echo '['.$m.']['.$n.'] = '.$array2[$m][$n];
+					//echo '<br />';
 				}
 			}
 			//print jumlah per baris matriks nilai subkriteria
@@ -158,16 +158,16 @@ class Ahp_subkriteria extends CI_Controller {
 					$jumlah_per_cell2 = $jumlah_per_cell2 + $array2[$p][$o];
 				}
 				$jumlah_per_baris2[$o] = $jumlah_per_cell2;
-				$prioritas[$o] = $jumlah_per_cell2/$jumlah_subkriteria;
+				$prioritas[$o] = round($jumlah_per_cell2/$jumlah_subkriteria,2);
 				//menyimpan nilai prioritas ke database tabel kriteria
-				$data = array('PRIORITAS_SUBKRITERIA' => $prioritas[$o]);
-				$this->subkriteria_model->update($this->input->post($o), $data);
+				//$data = array('PRIORITAS_SUBKRITERIA' => $prioritas[$o]);
+				//$this->subkriteria_model->update($this->input->post($o), $data);
 				
 				$jumlah_per_cell2 = 0;
-				echo 'jumlah baris 2 ['.$o.'] = '.$jumlah_per_baris2[$o];
-				echo '<br />';
-				echo 'prioritas ['.$o.'] = '.$prioritas[$o];
-				echo '<br />';
+				//echo 'jumlah baris 2 ['.$o.'] = '.$jumlah_per_baris2[$o];
+				//echo '<br />';
+				//echo 'prioritas ['.$o.'] = '.$prioritas[$o];
+				//echo '<br />';
 			}
 			//matriks penjumlahan setiap baris
 			$array3 = array();
@@ -175,7 +175,7 @@ class Ahp_subkriteria extends CI_Controller {
 			{
 				for($s=0;$s<$jumlah_subkriteria;$s++)
 				{				
-					$array3[$s][$r] = $array1[$s][$r]*$prioritas[$r];
+					$array3[$s][$r] = round($array1[$s][$r]*$prioritas[$r],2);
 					//echo '['.$r.']['.$s.'] = '.$array3[$r][$s];
 					//echo '<br />';
 				}
@@ -190,32 +190,55 @@ class Ahp_subkriteria extends CI_Controller {
 				for($u=0;$u<$jumlah_subkriteria;$u++)
 				{	
 					$jumlah_per_cell3 = $jumlah_per_cell3 + $array3[$u][$t];			
-					echo '['.$t.']['.$u.'] = '.$array3[$t][$u];
-					echo '<br />';
+					//echo '['.$t.']['.$u.'] = '.$array3[$t][$u];
+					//echo '<br />';
 				}
 				$jumlah_per_baris3[$t] = $jumlah_per_cell3;
 				$hasil[$t] = $jumlah_per_baris3[$t] + $prioritas[$t];
 				$jumlah = $jumlah + $hasil[$t];
 				$jumlah_per_cell3 = 0;
-				echo 'jumlah baris 3 ['.$t.'] = '.$jumlah_per_baris3[$t];
-				echo '<br />';
-				echo 'hasil ['.$t.'] => '.$jumlah_per_baris3[$t].'+'.$prioritas[$t].' = '.$hasil[$t];
-				echo '<br />';
+				//echo 'jumlah baris 3 ['.$t.'] = '.$jumlah_per_baris3[$t];
+				//echo '<br />';
+				//echo 'hasil ['.$t.'] => '.$jumlah_per_baris3[$t].'+'.$prioritas[$t].' = '.$hasil[$t];
+				//echo '<br />';
 			}
 			$alpha_max = $jumlah/$jumlah_subkriteria;
 			$consistency_index = ($alpha_max - $jumlah_subkriteria)/$jumlah_subkriteria;
 			$consistency_ratio = $consistency_index/1.12;
-			echo 'CR = '.$consistency_ratio;
+			//echo 'CR = '.$consistency_ratio;
 			//menentukan subprioritas subkriteria
 			$prioritas_max = max($prioritas);
 			$subprioritas = array();
 			for($v=0;$v<$jumlah_subkriteria;$v++)
 			{
-				$subprioritas[$v] = $prioritas[$v]/$prioritas_max;
-				echo 'subprioritas ['.$v.'] => '.$prioritas[$v].' / '.$prioritas_max.' = '.$subprioritas[$v];
-				echo '<br />';
+				$subprioritas[$v] = round($prioritas[$v]/$prioritas_max,2);
+				//echo 'subprioritas ['.$v.'] => '.$prioritas[$v].' / '.$prioritas_max.' = '.$subprioritas[$v];
+				//echo '<br />';
+				$data = array('PRIORITAS_SUBKRITERIA' => $subprioritas[$v]);
+				$this->subkriteria_model->update($this->input->post($v), $data);
 			}
-			redirect('master_subkriteria/grid/'.$kriteria_id);
+			if($consistency_ratio <= 0.1)
+				$keterangan = 'rasio konsistensi dari perhitungan dapat diterima.';
+			else
+				$keterangan = 'rasio konsistensi dari perhitungan tidak dapat diterima.';
+			$data['array1'] = $array1;
+			$data['jumlah_subkriteria'] = $jumlah_subkriteria;
+			$data['result_subkriteria'] = $this->ahp_subkriteria_model->get_subkriteria($kriteria_id)->result();
+			$data['array2'] = $array2;
+			$data['array3'] = $array3;
+			$data['jumlah_per_baris'] = $jumlah_per_baris;
+			$data['jumlah_per_baris2'] = $jumlah_per_baris2;
+			$data['jumlah_per_baris3'] = $jumlah_per_baris3;
+			$data['prioritas'] = $prioritas;
+			$data['subprioritas'] = $subprioritas;
+			$data['keterangan'] = $keterangan;
+			$data['alpha_max'] = $alpha_max;
+			$data['consistency_index'] = $consistency_index;
+			$data['consistency_ratio'] = $consistency_ratio;
+			$data['kriteria_id'] = $kriteria_id;
+			$data['content'] = $this->load->view('tampilan_hasil_subkriteria',$data,true);
+			$this->load->view('main',$data);
+			//redirect('master_subkriteria/grid/'.$kriteria_id);
 		}
 		else
 		{

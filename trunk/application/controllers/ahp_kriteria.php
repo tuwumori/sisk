@@ -194,7 +194,7 @@ class Ahp_kriteria extends CI_Controller {
 			$data['alpha_max'] = $alpha_max;
 			$data['consistency_index'] = $consistency_index;
 			$data['consistency_ratio'] = $consistency_ratio;
-			$data['content'] = $this->load->view('tampilan_hasil',$data,true);
+			$data['content'] = $this->load->view('tampilan_hasil_kriteria',$data,true);
 			$this->load->view('main',$data);
 		}
 		else

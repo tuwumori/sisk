@@ -34,7 +34,7 @@ class Master_subkriteria extends CI_Controller {
 		$colModel['no'] = array('No',20,TRUE,'center',0);
 		$colModel['nama_subkriteria'] = array('Nama Subkriteria',150,TRUE,'center',1);
 		$colModel['nama_kriteria'] = array('Nama Kriteria',150,TRUE,'center',1);
-		$colModel['prioritas_subkriteria'] = array('Prioritas',100,TRUE,'center',1);
+		$colModel['subprioritas_subkriteria'] = array('Subprioritas',100,TRUE,'center',1);
 		$colModel['bobot'] = array('Bobot',30,TRUE,'center',1);
 		$colModel['ubah'] = array('Ubah',30,FALSE,'center',0);
 		$colModel['hapus'] = array('Hapus',30,FALSE,'center',0);

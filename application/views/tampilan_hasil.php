@@ -1,6 +1,8 @@
 <script type="text/javascript" src="<?php echo base_url() ?>js/niceforms.js"></script>
 <h2>Hasil Perhitungan</h2>
-<div>		
+<a href="<?=base_url()?>master_kriteria" class="bt_blue"><span class="bt_blue_lft"></span><strong>Daftar Prioritas Kriteria</strong><span class="bt_blue_r"></span></a>	
+<br />
+<div>
 	<center><p><h4>Matriks Perbandingan</h4></p></center>
 	<br />
 	<table id="rounded-corner" summary="2007 Major IT Companies' Profit">
@@ -181,4 +183,5 @@
 			?>          	
     </tbody>
 </table>
+<a href="<?=base_url()?>master_kriteria" class="bt_blue"><span class="bt_blue_lft"></span><strong>Daftar Prioritas Kriteria</strong><span class="bt_blue_r"></span></a>     
 </div>

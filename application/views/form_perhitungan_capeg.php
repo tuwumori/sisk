@@ -53,7 +53,7 @@
 								<?php foreach($akademik_produksi->result() as $akprod){ ?>	
 								<tr>
 									<td><?php echo $no.'. '.$akprod->NAMA_PERTANYAAN.' '; ?> </td>
-									<td>&nbsp;&nbsp;:&nbsp;&nbsp;</td>
+									<td>&nbsp;&nbsp;:&nbsp;</td>
 									<td><?php echo form_input(array('name'=>$akprod->NILAI_PEG_PERTANYAAN_ID, 'id'=>'nilai' ,'size'=>'54','type'=>'text', 'maxlength'=>'255', 'value'=>$akprod->NILAI)); ?></td>
 								</tr>
 								<?php $no++; } ?>

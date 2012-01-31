@@ -4,6 +4,7 @@
 	<?php echo validation_errors(); ?>
 	<?php echo form_open(uri_string(), 'class ="niceform"');?>	
 				<?php $kodeuser = $this->session->userdata('kode_role');	
+				echo form_hidden('role', $role_dipilih);
 				if($kodeuser == "1"){ ?>
 				<a href="<?php echo base_url()?>index.php/master_pengguna/grid/">Kembali ke master pengguna</a>
 				<?php } else { ?>
@@ -16,12 +17,11 @@
                     </dl>
 					<dl>
                         <dt><label for="role">Role Pengguna : </label></dt>
-                        <dd>
+                        <dt>
                         <?php
-							if(set_value('role_dipilih')!=0) $role_dipilih = set_value('role_dipilih');
-							echo form_dropdown('role', $role, $role_dipilih, 'size="1"');
+							echo $nama_role;							
 						?>
-						</dd>
+						</dt>
                     </dl>
                     <dl>
                         <dt><label for="username">Username : </label></dt>

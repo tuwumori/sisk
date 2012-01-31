@@ -61,11 +61,18 @@ ddaccordion.init({
 		<?php
 			$master = false;
 			$penghitungan = false;
+			$pengelolaan_capeg = false;
+			$user_menu = false;
 			$this->load->library('session');
 			$kode_role = $this->session->userdata('kode_role');
 			if($kode_role == 1 ){	//untuk role admin
 				$master = true;
 				$penghitungan = true;
+				$pengelolaan_capeg = true;
+				$user_menu = true;
+			} else if($kode_role == 2){
+				$pengelolaan_capeg = true;
+				$user_menu = true;
 			}
 		?>
 </head>
@@ -107,19 +114,19 @@ ddaccordion.init({
                     <li><a href="<?php echo base_url() ?>index.php/ahp_subkriteria">Subkriteria</a></li>
                     </ul>
                 </div><?php } ?>
-				<a class="menuitem submenuheader" href="" >Pengelolaan Calon Pegawai</a>
+				<?php if($pengelolaan_capeg) { ?><a class="menuitem submenuheader" href="" >Pengelolaan Calon Pegawai</a>
                 <div class="submenu">
                     <ul>
 					<li><a href="<?php echo base_url() ?>index.php/pengelolaan_capeg">Daftar Calon Pegawai</a></li>
                     </ul>
-                </div> 
-                <a class="menuitem submenuheader" href="" >User Menu</a>
+                </div> <?php } ?>
+                <?php if($user_menu) { ?><a class="menuitem submenuheader" href="" >User Menu</a>
                 <div class="submenu">
                     <ul>
 					<li><a href="<?php echo base_url() ?>index.php/user_menu/index">Data User</a></li>
                     <li><a href="<?php echo base_url() ?>index.php/user_menu/logout">Logout</a></li>
                     </ul>
-                </div>                    
+                </div> <?php } ?>                    
             </div>  
     </div>  
     

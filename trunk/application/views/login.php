@@ -46,7 +46,7 @@ ddaccordion.init({
 <div id="main_container">
 
 	<div class="header_login">
-    <div class="logo"><a href="#"><img src="images/logo.gif" alt="" title="" border="0" /></a></div>
+    <div class="logo"><a href="#"><img src="<?=base_url()?>images/icon/green-office-building.png" alt="" title="" border="0" /></a></div>
     
     </div>
 
@@ -83,7 +83,7 @@ ddaccordion.init({
     
     <div class="footer_login">
     
-    	<div class="left_footer_login">© 2011 Research & Development Team</div>
+    	<div class="left_footer_login">ï¿½ 2011 Research & Development Team</div>
     </div>
 
 </div>		

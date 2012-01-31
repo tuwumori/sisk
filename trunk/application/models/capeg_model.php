@@ -85,10 +85,11 @@ class Capeg_model extends CI_Model {
 		$this->db->where('NAMA_KRITERIA', $kriteria);
 		$this->db->where('NAMA_BAGIAN', $bagian);
 		return $this->db->get();
+		//return $result->row()->NILAI;
 	}
 	
 	function get_jumlah_pertanyaan($capeg_id, $bagian, $kriteria){
-		//$this->db->select('*');
+		$this->db->select('*');
 		$this->db->from('nilai_pegawai_per_pertanyaan');
 		$this->db->join('pertanyaan', 'nilai_pegawai_per_pertanyaan.PERTANYAAN_ID = pertanyaan.PERTANYAAN_ID');
 		$this->db->join('kriteria', 'pertanyaan.KRITERIA_ID = kriteria.KRITERIA_ID'); 		
@@ -133,6 +134,10 @@ class Capeg_model extends CI_Model {
 	
 	function add_penilain($data){
 		$this->db->insert('penilaian', $data);
+	}
+	
+	function delete_penilaian($capeg_id){
+		$this->db->delete('penilaian', array('CAPEG_ID' => $capeg_id));
 	}
 	
 	/*function get_pertanyaan_tes_psikologi($capeg_id, $bagian){

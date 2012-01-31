@@ -9,7 +9,7 @@ class User_menu extends CI_Controller {
 		$this->load->library('flexigrid');	
 		$this->load->helper('flexigrid');
 		$this->load->model('user_model');
-		//$this->cek_session();
+		$this->cek_session();
     }
 	
 	function cek_session()
@@ -65,9 +65,11 @@ class User_menu extends CI_Controller {
 	function grid_data_pengguna() 
 	{
 		$iduser = $this->session->userdata('iduser');
+		$kode_role = $this->session->userdata('kode_role');
 		$valid_fields = array('USERID','NAMA','USERNAME');
 		$this->flexigrid->validate_post('USERID','asc',$valid_fields);
 		$records = $this->user_model->grid_user_by_id($iduser);
+		
 		$this->output->set_header($this->config->item('json_header'));
 			
 		$no = 0;
@@ -124,6 +126,7 @@ class User_menu extends CI_Controller {
 			}
 			$data['nama'] = $this->user_model->get_user($userid)->row()->NAMA;
 			$data['role_dipilih'] = $this->user_model->get_user($userid)->row()->KODEROLE;
+			$data['nama_role'] = $this->user_model->get_user($userid)->row()->ROLE;
 			$data['username'] = $this->user_model->get_user($userid)->row()->USERNAME;
 			//$data['password'] = $this->user_model->get_user($userid)->row()->PASSWORD;
 			//$data['konf_password'] = $this->user_model->get_user($userid)->row()->PASSWORD;

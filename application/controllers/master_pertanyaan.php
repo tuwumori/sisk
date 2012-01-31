@@ -10,7 +10,7 @@ class Master_pertanyaan extends CI_Controller {
 		$this->load->model('bagian_model');
 		$this->load->model('kriteria_model');
 		$this->load->model('pertanyaan_model');
-		//$this->cek_session();
+		$this->cek_session();
 	}
 	
 	function cek_session()

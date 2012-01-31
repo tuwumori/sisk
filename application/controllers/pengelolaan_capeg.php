@@ -9,13 +9,13 @@ class Pengelolaan_capeg extends CI_Controller {
 		$this->load->helper('flexigrid');
 		$this->load->model('capeg_model');
 		$this->load->model('pertanyaan_model');
-		//$this->cek_session();
+		$this->cek_session();
 	}
 	
 	function cek_session()
 	{	
 		$kode_role = $this->session->userdata('kode_role');
-		if($kode_role == '' || $kode_role != 1)
+		if($kode_role == '' || $kode_role != 1 && $kode_role !=2)
 		{
 			redirect('login/login_ulang');
 		}
@@ -184,6 +184,7 @@ class Pengelolaan_capeg extends CI_Controller {
 					$lakukan_hitung = 'yes';
 				} else{
 					$lakukan_hitung = 'no';
+					redirect('pengelolaan_capeg/perhitungan/'.$capeg_id);
 				}
 			}
 			
@@ -195,6 +196,45 @@ class Pengelolaan_capeg extends CI_Controller {
 					);
 					
 					$this->capeg_model->update_perpertanyaan($row->NILAI_PEG_PERTANYAAN_ID, $data_update);
+					}
+					else{
+					$data['akademik_produksi'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Produksi', 'tes akademik');
+					$data['psikologi_produksi'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Produksi', 'tes psikologi');
+					$data['kepribadian_produksi'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Produksi', 'tes kepribadian');
+					$data['wawancara_produksi'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Produksi', 'tes wawancara');
+					$data['pengetahuan_produksi'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Produksi', 'tes pengetahuan');
+					
+					$data['akademik_marketing'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Marketing', 'tes akademik');
+					$data['psikologi_marketing'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Marketing', 'tes psikologi');
+					$data['kepribadian_marketing'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Marketing', 'tes kepribadian');
+					$data['wawancara_marketing'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Marketing', 'tes wawancara');
+					$data['pengetahuan_marketing'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Marketing', 'tes pengetahuan');
+					
+					$data['akademik_customer'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Customer', 'tes akademik');
+					$data['psikologi_customer'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Customer', 'tes psikologi');
+					$data['kepribadian_customer'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Customer', 'tes kepribadian');
+					$data['wawancara_customer'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Customer', 'tes wawancara');
+					$data['pengetahuan_customer'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Customer', 'tes pengetahuan');
+					
+					$data['nilai_bagian_produksi'] = $this->capeg_model->get_sum_perbagian($capeg_id, 'Bagian Produksi')->row()->TOTAL_NILAI;
+					$data['nilai_bagian_marketing'] = $this->capeg_model->get_sum_perbagian($capeg_id, 'Bagian Marketing')->row()->TOTAL_NILAI;
+					$data['nilai_bagian_customer'] = $this->capeg_model->get_sum_perbagian($capeg_id, 'Bagian Customer')->row()->TOTAL_NILAI;
+					
+					$data['min_bagian_produksi'] = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->NILAI_MINIMUM;
+					$data['min_bagian_marketing'] = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->NILAI_MINIMUM;
+					$data['min_bagian_customer'] = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->NILAI_MINIMUM;
+					
+					$data['nama'] = $this->capeg_model->get_capeg_by_id($capeg_id)->row()->NAMA_CAPEG;
+					
+					$data['status'] = $this->capeg_model->get_capeg_by_id($capeg_id)->row()->STATUS_PEGAWAI;
+					
+					$data['hitung'] = 'yes';
+					
+					$data['content'] = $this->load->view('form_perhitungan_capeg',$data,true);
+					$this->load->view('main',$data);
+				}
+					
+			}
 					
 					$akademik_produksi = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Produksi', 'tes akademik')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Produksi', 'tes akademik');
 					$psikologi_produksi = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Produksi', 'tes psikologi')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Produksi', 'tes psikologi');
@@ -203,21 +243,23 @@ class Pengelolaan_capeg extends CI_Controller {
 					$pengetahuan_produksi = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Produksi', 'tes pengetahuan')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Produksi', 'tes pengetahuan');
 				
 					$akademik_marketing = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Marketing', 'tes akademik')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Marketing', 'tes akademik');
-					$psikologi_marketing = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Marketing', 'tes psikologi')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Marketing', 'tes akademik');
-					$kepribadian_marketing = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Marketing', 'tes kepribadian')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Marketing', 'tes akademik');
-					$wawancara_marketing = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Marketing', 'tes wawancara')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Marketing', 'tes akademik');
-					$pengetahuan_marketing = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Marketing', 'tes pengetahuan')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Marketing', 'tes akademik');
+					$psikologi_marketing = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Marketing', 'tes psikologi')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Marketing', 'tes psikologi');
+					$kepribadian_marketing = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Marketing', 'tes kepribadian')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Marketing', 'tes kepribadian');
+					$wawancara_marketing = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Marketing', 'tes wawancara')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Marketing', 'tes wawancara');
+					$pengetahuan_marketing = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Marketing', 'tes pengetahuan')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Marketing', 'tes pengetahuan');
 					
 					$akademik_customer = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Customer', 'tes akademik')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Customer', 'tes akademik');
-					$psikologi_customer = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Customer', 'tes psikologi')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Customer', 'tes akademik');
-					$kepribadian_customer = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Customer', 'tes kepribadian')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Customer', 'tes akademik');
-					$wawancara_customer = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Customer', 'tes wawancara')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Customer', 'tes akademik');
-					$pengetahuan_customer = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Customer', 'tes pengetahuan')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Customer', 'tes akademik');
+					$psikologi_customer = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Customer', 'tes psikologi')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Customer', 'tes psikologi');
+					$kepribadian_customer = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Customer', 'tes kepribadian')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Customer', 'tes kepribadian');
+					$wawancara_customer = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Customer', 'tes wawancara')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Customer', 'tes wawancara');
+					$pengetahuan_customer = $this->capeg_model->get_sum_nilai_pertanyaan($capeg_id, 'Bagian Customer', 'tes pengetahuan')->row()->NILAI/$this->capeg_model->get_jumlah_pertanyaan($capeg_id, 'Bagian Customer', 'tes pengetahuan');
+					
+					$this->capeg_model->delete_penilaian($capeg_id);
 					
 					//akademik Produksi
 					if($akademik_produksi < 40){
 						$akademik_produksi = 'sangat kurang';
-						$nilai_akademik_produksi = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
+						$nilai_akademik_produksi = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -234,7 +276,7 @@ class Pengelolaan_capeg extends CI_Controller {
 										
 					} else if($akademik_produksi > 89){
 						$akademik_produksi = 'sangat bagus';
-						$nilai_akademik_produksi = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
+						$nilai_akademik_produksi = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat bagus')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat bagus')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -251,7 +293,7 @@ class Pengelolaan_capeg extends CI_Controller {
 						
 					} else if($akademik_produksi > 39 && $akademik_produksi < 60){
 						$akademik_produksi = 'kurang';
-						$nilai_akademik_produksi = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
+						$nilai_akademik_produksi = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -268,7 +310,7 @@ class Pengelolaan_capeg extends CI_Controller {
 						
 					} else if($akademik_produksi > 59 && $akademik_produksi < 80){
 						$akademik_produksi = 'cukup';
-						$nilai_akademik_produksi = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'cukup')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
+						$nilai_akademik_produksi = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'cukup')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'cukup')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'cukup')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -285,7 +327,7 @@ class Pengelolaan_capeg extends CI_Controller {
 						
 					} else if($akademik_produksi > 79 && $akademik_produksi < 90){
 						$akademik_produksi = 'baik';
-						$nilai_akademik_produksi = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'baik')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
+						$nilai_akademik_produksi = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'baik')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'baik')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'baik')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -305,7 +347,7 @@ class Pengelolaan_capeg extends CI_Controller {
 					//psikologi produksi
 					if($psikologi_produksi < 40){
 						$psikologi_produksi = 'sangat kurang';
-						$nilai_psikologi_produksi = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
+						$nilai_psikologi_produksi = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -315,14 +357,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_produksi
+											'TOTAL_NILAI' => $nilai_psikologi_produksi
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 										
 					} else if($psikologi_produksi > 89){
 						$psikologi_produksi = 'sangat bagus';
-						$nilai_psikologi_produksi = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
+						$nilai_psikologi_produksi = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat bagus')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat bagus')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -332,14 +374,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_produksi
+											'TOTAL_NILAI' => $nilai_psikologi_produksi
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($psikologi_produksi > 39 && $psikologi_produksi < 60){
 						$psikologi_produksi = 'kurang';
-						$nilai_psikologi_produksi = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
+						$nilai_psikologi_produksi = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -349,14 +391,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_produksi
+											'TOTAL_NILAI' => $nilai_psikologi_produksi
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($psikologi_produksi > 59 && $psikologi_produksi < 80){
 						$psikologi_produksi = 'cukup';
-						$nilai_psikologi_produksi = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'cukup')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
+						$nilai_psikologi_produksi = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'cukup')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'cukup')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'cukup')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -366,14 +408,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_produksi
+											'TOTAL_NILAI' => $nilai_psikologi_produksi
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($psikologi_produksi > 79 && $psikologi_produksi < 90){
 						$psikologi_produksi = 'baik';
-						$nilai_psikologi_produksi = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'baik')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
+						$nilai_psikologi_produksi = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'baik')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'baik')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'baik')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -383,7 +425,7 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_produksi
+											'TOTAL_NILAI' => $nilai_psikologi_produksi
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
@@ -393,7 +435,7 @@ class Pengelolaan_capeg extends CI_Controller {
 					//tes kepribadian Produksi
 					if($kepribadian_produksi < 40){
 						$kepribadian_produksi = 'sangat kurang';
-						$nilai_kepribadian_produksi = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
+						$nilai_kepribadian_produksi = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -403,14 +445,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_produksi
+											'TOTAL_NILAI' => $nilai_kepribadian_produksi
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 										
 					} else if($kepribadian_produksi > 89){
 						$kepribadian_produksi = 'sangat bagus';
-						$nilai_kepribadian_produksi = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
+						$nilai_kepribadian_produksi = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat bagus')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat bagus')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -420,14 +462,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_produksi
+											'TOTAL_NILAI' => $nilai_kepribadian_produksi
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($kepribadian_produksi > 39 && $psikologi_produksi < 60){
 						$kepribadian_produksi = 'kurang';
-						$nilai_kepribadian_produksi = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
+						$nilai_kepribadian_produksi = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -437,14 +479,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_produksi
+											'TOTAL_NILAI' => $nilai_kepribadian_produksi
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($kepribadian_produksi > 59 && $psikologi_produksi < 80){
 						$kepribadian_produksi = 'cukup';
-						$nilai_kepribadian_produksi = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'cukup')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
+						$nilai_kepribadian_produksi = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'cukup')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'cukup')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'cukup')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -454,14 +496,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_produksi
+											'TOTAL_NILAI' => $nilai_kepribadian_produksi
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($kepribadian_produksi > 79 && $psikologi_produksi < 90){
 						$kepribadian_produksi = 'baik';
-						$nilai_kepribadian_produksi = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'baik')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
+						$nilai_kepribadian_produksi = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'baik')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'baik')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'baik')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -471,7 +513,7 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_produksi
+											'TOTAL_NILAI' => $nilai_kepribadian_produksi
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
@@ -481,7 +523,7 @@ class Pengelolaan_capeg extends CI_Controller {
 					//wawancara Produksi
 					if($wawancara_produksi < 40){
 						$wawancara_produksi = 'sangat kurang';
-						$nilai_wawancara_produksi = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
+						$nilai_wawancara_produksi = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -491,14 +533,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_produksi
+											'TOTAL_NILAI' => $nilai_wawancara_produksi
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 										
 					} else if($wawancara_produksi > 89){
 						$wawancara_produksi = 'sangat bagus';
-						$nilai_wawancara_produksi = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
+						$nilai_wawancara_produksi = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat bagus')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat bagus')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -508,14 +550,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_produksi
+											'TOTAL_NILAI' => $nilai_wawancara_produksi
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($wawancara_produksi > 39 && $psikologi_produksi < 60){
 						$wawancara_produksi = 'kurang';
-						$nilai_wawancara_produksi = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
+						$nilai_wawancara_produksi = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -525,14 +567,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_produksi
+											'TOTAL_NILAI' => $nilai_wawancara_produksi
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($wawancara_produksi > 59 && $psikologi_produksi < 80){
 						$wawancara_produksi = 'cukup';
-						$nilai_wawancara_produksi = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'cukup')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
+						$nilai_wawancara_produksi = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'cukup')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'cukup')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'cukup')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -542,14 +584,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_produksi
+											'TOTAL_NILAI' => $nilai_wawancara_produksi
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($wawancara_produksi > 79 && $psikologi_produksi < 90){
 						$wawancara_produksi = 'baik';
-						$nilai_wawancara_produksi = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'baik')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
+						$nilai_wawancara_produksi = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'baik')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'baik')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'baik')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -559,7 +601,7 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_produksi
+											'TOTAL_NILAI' => $nilai_wawancara_produksi
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
@@ -569,7 +611,7 @@ class Pengelolaan_capeg extends CI_Controller {
 					//tes pengetahuan Produksi
 					if($pengetahuan_produksi < 40){
 						$pengetahuan_produksi = 'sangat kurang';
-						$nilai_pengetahuan_produksi = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
+						$nilai_pengetahuan_produksi = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -579,14 +621,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_produksi
+											'TOTAL_NILAI' => $nilai_pengetahuan_produksi
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 										
 					} else if($pengetahuan_produksi > 89){
 						$pengetahuan_produksi = 'sangat bagus';
-						$nilai_pengetahuan_produksi = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
+						$nilai_pengetahuan_produksi = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat bagus')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat bagus')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -596,14 +638,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_produksi
+											'TOTAL_NILAI' => $nilai_pengetahuan_produksi
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($pengetahuan_produksi > 39 && $psikologi_produksi < 60){
 						$pengetahuan_produksi = 'kurang';
-						$nilai_pengetahuan_produksi = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
+						$nilai_pengetahuan_produksi = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -613,14 +655,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_produksi
+											'TOTAL_NILAI' => $nilai_pengetahuan_produksi
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($pengetahuan_produksi > 59 && $psikologi_produksi < 80){
 						$pengetahuan_produksi = 'cukup';
-						$nilai_pengetahuan_produksi = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'cukup')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
+						$nilai_pengetahuan_produksi = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'cukup')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'cukup')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'cukup')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -630,14 +672,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_produksi
+											'TOTAL_NILAI' => $nilai_pengetahuan_produksi
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($pengetahuan_produksi > 79 && $psikologi_produksi < 90){
 						$pengetahuan_produksi = 'baik';
-						$nilai_pengetahuan_produksi = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'baik')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
+						$nilai_pengetahuan_produksi = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'baik')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'baik')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'baik')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->BAGIAN_ID;
@@ -647,7 +689,7 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_produksi
+											'TOTAL_NILAI' => $nilai_pengetahuan_produksi
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
@@ -658,7 +700,7 @@ class Pengelolaan_capeg extends CI_Controller {
 					//akademik Marketing
 					if($akademik_marketing < 40){
 						$akademik_marketing = 'sangat kurang';
-						$nilai_akademik_marketing = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
+						$nilai_akademik_marketing = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -675,7 +717,7 @@ class Pengelolaan_capeg extends CI_Controller {
 										
 					} else if($akademik_marketing > 89){
 						$akademik_marketing = 'sangat bagus';
-						$nilai_akademik_marketing = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
+						$nilai_akademik_marketing = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat bagus')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat bagus')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -692,7 +734,7 @@ class Pengelolaan_capeg extends CI_Controller {
 						
 					} else if($akademik_marketing > 39 && $akademik_marketing < 60){
 						$akademik_marketing = 'kurang';
-						$nilai_akademik_marketing = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
+						$nilai_akademik_marketing = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -709,7 +751,7 @@ class Pengelolaan_capeg extends CI_Controller {
 						
 					} else if($akademik_marketing > 59 && $akademik_marketing < 80){
 						$akademik_marketing = 'cukup';
-						$nilai_akademik_marketing = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'cukup')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
+						$nilai_akademik_marketing = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'cukup')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'cukup')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'cukup')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -726,7 +768,7 @@ class Pengelolaan_capeg extends CI_Controller {
 						
 					} else if($akademik_marketing > 79 && $akademik_marketing < 90){
 						$akademik_marketing = 'baik';
-						$nilai_akademik_marketing = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'baik')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
+						$nilai_akademik_marketing = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'baik')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'baik')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'baik')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -746,7 +788,7 @@ class Pengelolaan_capeg extends CI_Controller {
 					//psikologi marketing
 					if($psikologi_marketing < 40){
 						$psikologi_marketing = 'sangat kurang';
-						$nilai_psikologi_marketing = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
+						$nilai_psikologi_marketing = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -756,14 +798,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_marketing
+											'TOTAL_NILAI' => $nilai_psikologi_marketing
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 										
 					} else if($psikologi_marketing > 89){
 						$psikologi_marketing = 'sangat bagus';
-						$nilai_psikologi_marketing = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
+						$nilai_psikologi_marketing = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat bagus')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat bagus')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -773,14 +815,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_marketing
+											'TOTAL_NILAI' => $nilai_psikologi_marketing
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($psikologi_marketing > 39 && $psikologi_marketing < 60){
 						$psikologi_marketing = 'kurang';
-						$nilai_psikologi_marketing = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
+						$nilai_psikologi_marketing = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -790,14 +832,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_marketing
+											'TOTAL_NILAI' => $nilai_psikologi_marketing
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($psikologi_marketing > 59 && $psikologi_marketing < 80){
 						$psikologi_marketing = 'cukup';
-						$nilai_psikologi_marketing = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'cukup')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
+						$nilai_psikologi_marketing = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'cukup')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'cukup')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'cukup')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -807,14 +849,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_marketing
+											'TOTAL_NILAI' => $nilai_psikologi_marketing
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($psikologi_marketing > 79 && $psikologi_marketing < 90){
 						$psikologi_marketing = 'baik';
-						$nilai_psikologi_marketing = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'baik')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
+						$nilai_psikologi_marketing = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'baik')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'baik')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'baik')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -824,7 +866,7 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_marketing
+											'TOTAL_NILAI' => $nilai_psikologi_marketing
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
@@ -834,7 +876,7 @@ class Pengelolaan_capeg extends CI_Controller {
 					//tes kepribadian Marketing
 					if($kepribadian_marketing < 40){
 						$kepribadian_marketing = 'sangat kurang';
-						$nilai_kepribadian_marketing = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
+						$nilai_kepribadian_marketing = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -844,14 +886,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_marketing
+											'TOTAL_NILAI' => $nilai_kepribadian_marketing
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 										
 					} else if($kepribadian_marketing > 89){
 						$kepribadian_marketing = 'sangat bagus';
-						$nilai_kepribadian_marketing = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
+						$nilai_kepribadian_marketing = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat bagus')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat bagus')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -861,14 +903,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_marketing
+											'TOTAL_NILAI' => $nilai_kepribadian_marketing
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($kepribadian_marketing > 39 && $psikologi_marketing < 60){
 						$kepribadian_marketing = 'kurang';
-						$nilai_kepribadian_marketing = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
+						$nilai_kepribadian_marketing = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -878,14 +920,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_marketing
+											'TOTAL_NILAI' => $nilai_kepribadian_marketing
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($kepribadian_marketing > 59 && $psikologi_marketing < 80){
 						$kepribadian_marketing = 'cukup';
-						$nilai_kepribadian_marketing = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'cukup')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
+						$nilai_kepribadian_marketing = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'cukup')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'cukup')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'cukup')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -895,14 +937,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_marketing
+											'TOTAL_NILAI' => $nilai_kepribadian_marketing
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($kepribadian_marketing > 79 && $psikologi_marketing < 90){
 						$kepribadian_marketing = 'baik';
-						$nilai_kepribadian_marketing = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'baik')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
+						$nilai_kepribadian_marketing = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'baik')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'baik')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'baik')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -912,7 +954,7 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_marketing
+											'TOTAL_NILAI' => $nilai_kepribadian_marketing
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
@@ -922,7 +964,7 @@ class Pengelolaan_capeg extends CI_Controller {
 					//wawancara Marketing
 					if($wawancara_marketing < 40){
 						$wawancara_marketing = 'sangat kurang';
-						$nilai_wawancara_marketing = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
+						$nilai_wawancara_marketing = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -932,14 +974,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_marketing
+											'TOTAL_NILAI' => $nilai_wawancara_marketing
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 										
 					} else if($wawancara_marketing > 89){
 						$wawancara_marketing = 'sangat bagus';
-						$nilai_wawancara_marketing = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
+						$nilai_wawancara_marketing = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat bagus')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat bagus')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -949,14 +991,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_marketing
+											'TOTAL_NILAI' => $nilai_wawancara_marketing
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($wawancara_marketing > 39 && $psikologi_marketing < 60){
 						$wawancara_marketing = 'kurang';
-						$nilai_wawancara_marketing = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
+						$nilai_wawancara_marketing = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -966,14 +1008,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_marketing
+											'TOTAL_NILAI' => $nilai_wawancara_marketing
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($wawancara_marketing > 59 && $psikologi_marketing < 80){
 						$wawancara_marketing = 'cukup';
-						$nilai_wawancara_marketing = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'cukup')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
+						$nilai_wawancara_marketing = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'cukup')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'cukup')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'cukup')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -983,14 +1025,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_marketing
+											'TOTAL_NILAI' => $nilai_wawancara_marketing
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($wawancara_marketing > 79 && $psikologi_marketing < 90){
 						$wawancara_marketing = 'baik';
-						$nilai_wawancara_marketing = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'baik')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
+						$nilai_wawancara_marketing = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'baik')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'baik')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'baik')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -1000,7 +1042,7 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_marketing
+											'TOTAL_NILAI' => $nilai_wawancara_marketing
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
@@ -1010,7 +1052,7 @@ class Pengelolaan_capeg extends CI_Controller {
 					//tes pengetahuan Marketing
 					if($pengetahuan_marketing < 40){
 						$pengetahuan_marketing = 'sangat kurang';
-						$nilai_pengetahuan_marketing = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
+						$nilai_pengetahuan_marketing = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -1020,14 +1062,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_marketing
+											'TOTAL_NILAI' => $nilai_pengetahuan_marketing
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 										
 					} else if($pengetahuan_marketing > 89){
 						$pengetahuan_marketing = 'sangat bagus';
-						$nilai_pengetahuan_marketing = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
+						$nilai_pengetahuan_marketing = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat bagus')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat bagus')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -1037,14 +1079,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_marketing
+											'TOTAL_NILAI' => $nilai_pengetahuan_marketing
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($pengetahuan_marketing > 39 && $psikologi_marketing < 60){
 						$pengetahuan_marketing = 'kurang';
-						$nilai_pengetahuan_marketing = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
+						$nilai_pengetahuan_marketing = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -1054,14 +1096,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_marketing
+											'TOTAL_NILAI' => $nilai_pengetahuan_marketing
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($pengetahuan_marketing > 59 && $psikologi_marketing < 80){
 						$pengetahuan_marketing = 'cukup';
-						$nilai_pengetahuan_marketing = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'cukup')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
+						$nilai_pengetahuan_marketing = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'cukup')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'cukup')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'cukup')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -1071,14 +1113,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_marketing
+											'TOTAL_NILAI' => $nilai_pengetahuan_marketing
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($pengetahuan_marketing > 79 && $psikologi_marketing < 90){
 						$pengetahuan_marketing = 'baik';
-						$nilai_pengetahuan_marketing = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'baik')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
+						$nilai_pengetahuan_marketing = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'baik')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'baik')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'baik')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->BAGIAN_ID;
@@ -1088,7 +1130,7 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_marketing
+											'TOTAL_NILAI' => $nilai_pengetahuan_marketing
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
@@ -1099,7 +1141,7 @@ class Pengelolaan_capeg extends CI_Controller {
 					//akademik Customer
 					if($akademik_customer < 40){
 						$akademik_customer = 'sangat kurang';
-						$nilai_akademik_customer = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
+						$nilai_akademik_customer = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1116,7 +1158,7 @@ class Pengelolaan_capeg extends CI_Controller {
 										
 					} else if($akademik_customer > 89){
 						$akademik_customer = 'sangat bagus';
-						$nilai_akademik_customer = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
+						$nilai_akademik_customer = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat bagus')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'sangat bagus')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1133,7 +1175,7 @@ class Pengelolaan_capeg extends CI_Controller {
 						
 					} else if($akademik_customer > 39 && $akademik_customer < 60){
 						$akademik_customer = 'kurang';
-						$nilai_akademik_customer = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
+						$nilai_akademik_customer = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1150,7 +1192,7 @@ class Pengelolaan_capeg extends CI_Controller {
 						
 					} else if($akademik_customer > 59 && $akademik_customer < 80){
 						$akademik_customer = 'cukup';
-						$nilai_akademik_customer = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'cukup')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
+						$nilai_akademik_customer = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'cukup')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'cukup')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'cukup')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1167,7 +1209,7 @@ class Pengelolaan_capeg extends CI_Controller {
 						
 					} else if($akademik_customer > 79 && $akademik_customer < 90){
 						$akademik_customer = 'baik';
-						$nilai_akademik_customer = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'baik')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
+						$nilai_akademik_customer = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'baik')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes akademik')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'baik')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes akademik', 'baik')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1187,7 +1229,7 @@ class Pengelolaan_capeg extends CI_Controller {
 					//psikologi customer
 					if($psikologi_customer < 40){
 						$psikologi_customer = 'sangat kurang';
-						$nilai_psikologi_customer = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
+						$nilai_psikologi_customer = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1197,14 +1239,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_customer
+											'TOTAL_NILAI' => $nilai_psikologi_customer
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 										
 					} else if($psikologi_customer > 89){
 						$psikologi_customer = 'sangat bagus';
-						$nilai_psikologi_customer = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
+						$nilai_psikologi_customer = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat bagus')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'sangat bagus')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1214,14 +1256,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_customer
+											'TOTAL_NILAI' => $nilai_psikologi_customer
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($psikologi_customer > 39 && $psikologi_customer < 60){
 						$psikologi_customer = 'kurang';
-						$nilai_psikologi_customer = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
+						$nilai_psikologi_customer = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1231,14 +1273,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_customer
+											'TOTAL_NILAI' => $nilai_psikologi_customer
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($psikologi_customer > 59 && $psikologi_customer < 80){
 						$psikologi_customer = 'cukup';
-						$nilai_psikologi_customer = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'cukup')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
+						$nilai_psikologi_customer = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'cukup')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'cukup')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'cukup')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1248,14 +1290,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_customer
+											'TOTAL_NILAI' => $nilai_psikologi_customer
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($psikologi_customer > 79 && $psikologi_customer < 90){
 						$psikologi_customer = 'baik';
-						$nilai_psikologi_customer = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'baik')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
+						$nilai_psikologi_customer = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'baik')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes psikologi')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'baik')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes psikologi', 'baik')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1265,7 +1307,7 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_customer
+											'TOTAL_NILAI' => $nilai_psikologi_customer
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
@@ -1275,7 +1317,7 @@ class Pengelolaan_capeg extends CI_Controller {
 					//tes kepribadian Customer
 					if($kepribadian_customer < 40){
 						$kepribadian_customer = 'sangat kurang';
-						$nilai_kepribadian_customer = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
+						$nilai_kepribadian_customer = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1285,14 +1327,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_customer
+											'TOTAL_NILAI' => $nilai_kepribadian_customer
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 										
 					} else if($kepribadian_customer > 89){
 						$kepribadian_customer = 'sangat bagus';
-						$nilai_kepribadian_customer = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
+						$nilai_kepribadian_customer = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat bagus')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'sangat bagus')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1302,14 +1344,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_customer
+											'TOTAL_NILAI' => $nilai_kepribadian_customer
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($kepribadian_customer > 39 && $psikologi_customer < 60){
 						$kepribadian_customer = 'kurang';
-						$nilai_kepribadian_customer = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
+						$nilai_kepribadian_customer = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1319,14 +1361,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_customer
+											'TOTAL_NILAI' => $nilai_kepribadian_customer
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($kepribadian_customer > 59 && $psikologi_customer < 80){
 						$kepribadian_customer = 'cukup';
-						$nilai_kepribadian_customer = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'cukup')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
+						$nilai_kepribadian_customer = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'cukup')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'cukup')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'cukup')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1336,14 +1378,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_customer
+											'TOTAL_NILAI' => $nilai_kepribadian_customer
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($kepribadian_customer > 79 && $psikologi_customer < 90){
 						$kepribadian_customer = 'baik';
-						$nilai_kepribadian_customer = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'baik')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
+						$nilai_kepribadian_customer = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'baik')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes kepribadian')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'baik')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes kepribadian', 'baik')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1353,7 +1395,7 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_customer
+											'TOTAL_NILAI' => $nilai_kepribadian_customer
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
@@ -1363,7 +1405,7 @@ class Pengelolaan_capeg extends CI_Controller {
 					//wawancara Customer
 					if($wawancara_customer < 40){
 						$wawancara_customer = 'sangat kurang';
-						$nilai_wawancara_customer = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
+						$nilai_wawancara_customer = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1373,14 +1415,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_customer
+											'TOTAL_NILAI' => $nilai_wawancara_customer
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 										
 					} else if($wawancara_customer > 89){
 						$wawancara_customer = 'sangat bagus';
-						$nilai_wawancara_customer = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
+						$nilai_wawancara_customer = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat bagus')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'sangat bagus')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1390,14 +1432,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_customer
+											'TOTAL_NILAI' => $nilai_wawancara_customer
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($wawancara_customer > 39 && $psikologi_customer < 60){
 						$wawancara_customer = 'kurang';
-						$nilai_wawancara_customer = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
+						$nilai_wawancara_customer = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1407,14 +1449,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_customer
+											'TOTAL_NILAI' => $nilai_wawancara_customer
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($wawancara_customer > 59 && $psikologi_customer < 80){
 						$wawancara_customer = 'cukup';
-						$nilai_wawancara_customer = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'cukup')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
+						$nilai_wawancara_customer = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'cukup')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'cukup')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'cukup')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1424,14 +1466,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_customer
+											'TOTAL_NILAI' => $nilai_wawancara_customer
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($wawancara_customer > 79 && $psikologi_customer < 90){
 						$wawancara_customer = 'baik';
-						$nilai_wawancara_customer = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'baik')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
+						$nilai_wawancara_customer = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'baik')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes wawancara')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'baik')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes wawancara', 'baik')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1441,7 +1483,7 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_customer
+											'TOTAL_NILAI' => $nilai_wawancara_customer
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
@@ -1451,7 +1493,7 @@ class Pengelolaan_capeg extends CI_Controller {
 					//tes pengetahuan Customer
 					if($pengetahuan_customer < 40){
 						$pengetahuan_customer = 'sangat kurang';
-						$nilai_pengetahuan_customer = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
+						$nilai_pengetahuan_customer = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1461,14 +1503,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_customer
+											'TOTAL_NILAI' => $nilai_pengetahuan_customer
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 										
 					} else if($pengetahuan_customer > 89){
 						$pengetahuan_customer = 'sangat bagus';
-						$nilai_pengetahuan_customer = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
+						$nilai_pengetahuan_customer = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat bagus')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat bagus')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'sangat bagus')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1478,14 +1520,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_customer
+											'TOTAL_NILAI' => $nilai_pengetahuan_customer
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($pengetahuan_customer > 39 && $psikologi_customer < 60){
 						$pengetahuan_customer = 'kurang';
-						$nilai_pengetahuan_customer = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'kurang')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
+						$nilai_pengetahuan_customer = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'kurang')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'kurang')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'kurang')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1495,14 +1537,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_customer
+											'TOTAL_NILAI' => $nilai_pengetahuan_customer
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($pengetahuan_customer > 59 && $psikologi_customer < 80){
 						$pengetahuan_customer = 'cukup';
-						$nilai_pengetahuan_customer = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'cukup')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
+						$nilai_pengetahuan_customer = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'cukup')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'cukup')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'cukup')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1512,14 +1554,14 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_customer
+											'TOTAL_NILAI' => $nilai_pengetahuan_customer
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					} else if($pengetahuan_customer > 79 && $psikologi_customer < 90){
 						$pengetahuan_customer = 'baik';
-						$nilai_pengetahuan_customer = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'baik')->row()->PRIORITAS_SUBKRITERIA/$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
+						$nilai_pengetahuan_customer = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'baik')->row()->PRIORITAS_SUBKRITERIA*$this->capeg_model->get_prioritas_kriteria('tes pengetahuan')->row()->PRIORITAS_KRITERIA;
 						$id_sub = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'baik')->row()->SUBKRITERIA_ID;
 						$id_kriteria = $this->capeg_model->get_prioritas_subkriteria('tes pengetahuan', 'baik')->row()->KRITERIA_ID;
 						$id_bagian = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->BAGIAN_ID;
@@ -1529,22 +1571,22 @@ class Pengelolaan_capeg extends CI_Controller {
 											'SUBKRITERIA_ID' => $id_sub,
 											'BAGIAN_ID' => $id_bagian,
 											'CAPEG_ID' => $capeg_id,
-											'TOTAL_NILAI' => $nilai_akademik_customer
+											'TOTAL_NILAI' => $nilai_pengetahuan_customer
 										);
 										
 						$this->capeg_model->add_penilain($data_insert);
 						
 					}
 					
-					$nilai_bagian_produksi = $this->capeg_model->get_sum_perbagian($capeg_id, 'Bagian Produksi');
-					$nilai_bagian_marketing = $this->capeg_model->get_sum_perbagian($capeg_id, 'Bagian Marketing');
-					$nilai_bagian_customer = $this->capeg_model->get_sum_perbagian($capeg_id, 'Bagian Customer');
+					$nilai_bagian_produksi = $this->capeg_model->get_sum_perbagian($capeg_id, 'Bagian Produksi')->row()->TOTAL_NILAI;
+					$nilai_bagian_marketing = $this->capeg_model->get_sum_perbagian($capeg_id, 'Bagian Marketing')->row()->TOTAL_NILAI;
+					$nilai_bagian_customer = $this->capeg_model->get_sum_perbagian($capeg_id, 'Bagian Customer')->row()->TOTAL_NILAI;
 					
 					$min_bagian_produksi = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->NILAI_MINIMUM;
 					$min_bagian_marketing = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->NILAI_MINIMUM;
 					$min_bagian_customer = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->NILAI_MINIMUM;
 					
-					if($nilai_bagian_produksi < $min_bagian_produksi || $nilai_bagian_marketing < $min_bagian_marketing || $nilai_bagian_customer < $min_bagian_customer){
+					if($nilai_bagian_produksi < $min_bagian_produksi && $nilai_bagian_marketing < $min_bagian_marketing && $nilai_bagian_customer < $min_bagian_customer){
 						$status_peg = 'Gagal';
 					} else if($nilai_bagian_produksi > $nilai_bagian_marketing && $nilai_bagian_produksi > $nilai_bagian_customer){
 						if($nilai_bagian_produksi < $min_bagian_produksi){
@@ -1564,6 +1606,8 @@ class Pengelolaan_capeg extends CI_Controller {
 						} else {
 							$status_peg = 'Diterima di Bagian Marketing';
 							}
+					} else if($nilai_bagian_customer == $nilai_bagian_produksi || $nilai_bagian_customer == $nilai_bagian_marketing || $nilai_bagian_marketing == $nilai_bagian_produksi){
+						$status_peg = 'Diterima di Bagian Produksi';
 					}
 					
 					$data_status = array(
@@ -1590,34 +1634,13 @@ class Pengelolaan_capeg extends CI_Controller {
 					$data['wawancara_customer'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Customer', 'tes wawancara');
 					$data['pengetahuan_customer'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Customer', 'tes pengetahuan');
 					
-					$data['nama'] = $this->capeg_model->get_capeg_by_id($capeg_id)->row()->NAMA_CAPEG;
+					$data['nilai_bagian_produksi'] = $this->capeg_model->get_sum_perbagian($capeg_id, 'Bagian Produksi')->row()->TOTAL_NILAI;
+					$data['nilai_bagian_marketing'] = $this->capeg_model->get_sum_perbagian($capeg_id, 'Bagian Marketing')->row()->TOTAL_NILAI;
+					$data['nilai_bagian_customer'] = $this->capeg_model->get_sum_perbagian($capeg_id, 'Bagian Customer')->row()->TOTAL_NILAI;
 					
-					$data['status'] = $this->capeg_model->get_capeg_by_id($capeg_id)->row()->STATUS_PEGAWAI;
-					
-					$data['hitung'] = 'yes';
-					
-					$data['content'] = $this->load->view('form_perhitungan_capeg',$data,true);
-					$this->load->view('main',$data);
-					
-					
-				}else{
-					$data['akademik_produksi'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Produksi', 'tes akademik');
-					$data['psikologi_produksi'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Produksi', 'tes psikologi');
-					$data['kepribadian_produksi'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Produksi', 'tes kepribadian');
-					$data['wawancara_produksi'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Produksi', 'tes wawancara');
-					$data['pengetahuan_produksi'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Produksi', 'tes pengetahuan');
-					
-					$data['akademik_marketing'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Marketing', 'tes akademik');
-					$data['psikologi_marketing'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Marketing', 'tes psikologi');
-					$data['kepribadian_marketing'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Marketing', 'tes kepribadian');
-					$data['wawancara_marketing'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Marketing', 'tes wawancara');
-					$data['pengetahuan_marketing'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Marketing', 'tes pengetahuan');
-					
-					$data['akademik_customer'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Customer', 'tes akademik');
-					$data['psikologi_customer'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Customer', 'tes psikologi');
-					$data['kepribadian_customer'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Customer', 'tes kepribadian');
-					$data['wawancara_customer'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Customer', 'tes wawancara');
-					$data['pengetahuan_customer'] = $this->capeg_model->get_pertanyaan($capeg_id, 'Bagian Customer', 'tes pengetahuan');
+					$data['min_bagian_produksi'] = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->NILAI_MINIMUM;
+					$data['min_bagian_marketing'] = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->NILAI_MINIMUM;
+					$data['min_bagian_customer'] = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->NILAI_MINIMUM;
 					
 					$data['nama'] = $this->capeg_model->get_capeg_by_id($capeg_id)->row()->NAMA_CAPEG;
 					
@@ -1626,9 +1649,7 @@ class Pengelolaan_capeg extends CI_Controller {
 					$data['hitung'] = 'yes';
 					
 					$data['content'] = $this->load->view('form_perhitungan_capeg',$data,true);
-					$this->load->view('main',$data);
-				}
-			}		
+					$this->load->view('main',$data);		
 			
 		}
 		else
@@ -1656,6 +1677,14 @@ class Pengelolaan_capeg extends CI_Controller {
 			$data['status'] = $this->capeg_model->get_capeg_by_id($capeg_id)->row()->STATUS_PEGAWAI;
 			
 			$data['hitung'] = 'yes';
+			
+			$data['nilai_bagian_produksi'] = $this->capeg_model->get_sum_perbagian($capeg_id, 'Bagian Produksi')->row()->TOTAL_NILAI;
+			$data['nilai_bagian_marketing'] = $this->capeg_model->get_sum_perbagian($capeg_id, 'Bagian Marketing')->row()->TOTAL_NILAI;
+			$data['nilai_bagian_customer'] = $this->capeg_model->get_sum_perbagian($capeg_id, 'Bagian Customer')->row()->TOTAL_NILAI;
+			
+			$data['min_bagian_produksi'] = $this->capeg_model->get_bagian_id('Bagian Produksi')->row()->NILAI_MINIMUM;
+			$data['min_bagian_marketing'] = $this->capeg_model->get_bagian_id('Bagian Marketing')->row()->NILAI_MINIMUM;
+			$data['min_bagian_customer'] = $this->capeg_model->get_bagian_id('Bagian Customer')->row()->NILAI_MINIMUM;
 			
 			$data['content'] = $this->load->view('form_perhitungan_capeg',$data,true);
 			$this->load->view('main',$data);

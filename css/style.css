@@ -277,7 +277,10 @@ margin:7px 0 0 8px;
 }
 
 
-
+input#nilai{
+	width:120px;
+	text-align: center;
+}
 
 
 #rounded-corner

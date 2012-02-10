@@ -70,7 +70,7 @@ class Capeg_model extends CI_Model {
 		$this->db->where('NAMA_BAGIAN', $bagian);
 		return $this->db->get();
 	}
-	
+	/*
 	function update_perpertanyaan($pertanyaan_id, $data){
 		$this->db->where('NILAI_PEG_PERTANYAAN_ID',$pertanyaan_id)->update('nilai_pegawai_per_pertanyaan', $data);
 	}
@@ -150,7 +150,7 @@ class Capeg_model extends CI_Model {
 		$this->db->where('NAMA_KRITERIA', 'tes psikologi');
 		$this->db->where('NAMA_BAGIAN', $bagian);
 		return $this->db->get();
-	}
+	}*/
 	
 	function get_tes_akademik($capeg_id, $bagian){
 		$this->db->select('*');

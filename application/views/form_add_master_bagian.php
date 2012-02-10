@@ -11,7 +11,7 @@
                     </dl>
 					<dl>
                         <dt><label for="jabatan">Nilai Minimum : </label></dt>
-                        <?php if(set_value('nilai_minimum')!='') $nilai_minimum = set_value('nilai_minimum')?>
+                        <?php $nilai_minimum=''; if(set_value('nilai_minimum')!='') $nilai_minimum = set_value('nilai_minimum')?>
 						<dd><?php echo form_input(array('name'=>'nilai_minimum', 'id'=>'nilai_minimum' ,'size'=>'54','type'=>'text', 'maxlength'=>'255', 'value'=>$nilai_minimum)); ?></dd>
                     </dl>
                     <dl class="submit">

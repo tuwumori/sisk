@@ -68,7 +68,8 @@ class Kriteria_model extends CI_Model {
 	}
 	
 	function delete($id)
-	{
-		$this->db->delete('kriteria', array('kriteria_id' => $id)); 
+	{ 
+		$this->db->delete('subkriteria', array('kriteria_id' => $id)); 
+		$this->db->delete('kriteria', array('kriteria_id' => $id));
 	}
 }

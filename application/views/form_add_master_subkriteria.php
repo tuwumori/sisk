@@ -2,7 +2,7 @@
 	<h2>Tambah Subkriteria untuk Kriteria <?=$nama_kriteria?></h2>
 	<div>
 	<?php echo validation_errors(); ?>
-	<?php echo form_open('master_subkriteria/add_process', 'class ="niceform"');?>						
+	<?php echo form_open('master_subkriteria/add_process/'.$kriteria_id, 'class ="niceform"');?>						
 				<a href="<?php echo base_url()?>index.php/master_subkriteria/grid/<?php echo $kriteria_id;?>">Kembali ke master subkriteria</a>
                     <dl>
                         <dt><label for="role">Kriteria : </label></dt>

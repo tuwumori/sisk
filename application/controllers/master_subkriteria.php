@@ -97,7 +97,7 @@ class Master_subkriteria extends CI_Controller {
 										$row->NAMA_KRITERIA,
 										$row->PRIORITAS_SUBKRITERIA,
 								'<a href='.base_url().'index.php/master_subkriteria/edit/'.$row->SUBKRITERIA_ID.'/'.$kriteria_id.'><img border=\'0\' src=\''.base_url().'images/flexigrid/magnifier.png\'></a>',
-								'<a href='.base_url().'index.php/master_subkriteria/delete/'.$row->SUBKRITERIA_ID.' onclick="return confirm(\'Are you sure you want to delete?\')"><img border=\'0\' src=\''.base_url().'images/flexigrid/2.png\'></a>'
+								'<a href='.base_url().'index.php/master_subkriteria/delete/'.$row->SUBKRITERIA_ID.'/'.$kriteria_id.' onclick="return confirm(\'Are you sure you want to delete?\')"><img border=\'0\' src=\''.base_url().'images/flexigrid/2.png\'></a>'
 								);
 		}
 		
@@ -131,22 +131,20 @@ class Master_subkriteria extends CI_Controller {
 		$this->load->view('main',$data);
 	}
 	
-	public function add_process()
+	public function add_process($kriteria_id)
 	{
 		$data = array(
 						'nama_subkriteria' => $this->input->post('subkriteria'),
-						'kriteria_id' => $this->input->post('kriteria'),
-						'bobot' => $this->input->post('bobot')
+						'kriteria_id' => $this->input->post('kriteria')
 					);
 		if($this->cek_validasi())
 		{
 			$this->subkriteria_model->add($data);
-			redirect('master_subkriteria');
+			redirect('master_subkriteria/grid/'.$kriteria_id);
 		}
 		else
 		{
-			$this->add();
-			//redirect('jabatan/add');
+			$this->add($kriteria_id);
 		}
 	}
 	
@@ -171,8 +169,7 @@ class Master_subkriteria extends CI_Controller {
 	{
 		$data = array(
 					'nama_subkriteria' => $this->input->post('subkriteria'),
-					'kriteria_id' => $this->input->post('kriteria'),
-					'bobot' => $this->input->post('bobot')
+					'kriteria_id' => $this->input->post('kriteria')
 				);
 		if($this->cek_validasi())
 		{
@@ -195,10 +192,10 @@ class Master_subkriteria extends CI_Controller {
 		}
 	}
 	
-	public function delete($subkriteria_id)
+	public function delete($subkriteria_id, $kriteria_id)
 	{
 		$this->subkriteria_model->delete($subkriteria_id);
-		redirect('master_subkriteria');
+		redirect('master_subkriteria/grid/'.$kriteria_id);
 	}
 }
 

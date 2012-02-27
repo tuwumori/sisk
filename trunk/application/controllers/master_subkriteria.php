@@ -30,12 +30,12 @@ class Master_subkriteria extends CI_Controller {
 	
 	public function grid($kriteria_id)
 	{
+		$nama_kriteria = $this->kriteria_model->get_kriteria_by_id($kriteria_id)->row()->NAMA_KRITERIA;
 		//$kode_role = $this->session->userdata('kode_role');
 		$colModel['no'] = array('No',20,TRUE,'center',0);
 		$colModel['nama_subkriteria'] = array('Nama Subkriteria',150,TRUE,'center',1);
 		$colModel['nama_kriteria'] = array('Nama Kriteria',150,TRUE,'center',1);
 		$colModel['subprioritas_subkriteria'] = array('Subprioritas',100,TRUE,'center',1);
-		$colModel['bobot'] = array('Bobot',30,TRUE,'center',1);
 		$colModel['ubah'] = array('Ubah',30,FALSE,'center',0);
 		$colModel['hapus'] = array('Hapus',30,FALSE,'center',0);
 			
@@ -47,7 +47,7 @@ class Master_subkriteria extends CI_Controller {
 							'rpOptions' => '[15,30,50,100]',
 							'pagestat' => 'Menampilkan : {from} ke {to} dari {total} data.',
 							'blockOpacity' => 0,
-							'title' => 'Master Subkriteria',
+							'title' => 'Master Subkriteria ( Kriteria '.$nama_kriteria.' )',
 							'showTableToggleBtn' => false
 							);
 							
@@ -96,7 +96,6 @@ class Master_subkriteria extends CI_Controller {
 										$row->NAMA_SUBKRITERIA,
 										$row->NAMA_KRITERIA,
 										$row->PRIORITAS_SUBKRITERIA,
-										$row->BOBOT,
 								'<a href='.base_url().'index.php/master_subkriteria/edit/'.$row->SUBKRITERIA_ID.'/'.$kriteria_id.'><img border=\'0\' src=\''.base_url().'images/flexigrid/magnifier.png\'></a>',
 								'<a href='.base_url().'index.php/master_subkriteria/delete/'.$row->SUBKRITERIA_ID.' onclick="return confirm(\'Are you sure you want to delete?\')"><img border=\'0\' src=\''.base_url().'images/flexigrid/2.png\'></a>'
 								);
@@ -124,6 +123,8 @@ class Master_subkriteria extends CI_Controller {
 		{
 			$data_kriteria[$row->KRITERIA_ID] = $row->NAMA_KRITERIA;
 		}
+		$nama_kriteria = $this->kriteria_model->get_kriteria_by_id($kriteria_id)->row()->NAMA_KRITERIA;
+		$data['nama_kriteria'] = $nama_kriteria;
 		$data['kriteria_id'] =  $kriteria_id;
 		$data['kriteria'] =  $data_kriteria;
 		$data['content'] = $this->load->view('form_add_master_subkriteria',$data,true);

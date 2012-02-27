@@ -17,4 +17,12 @@ class Ahp_kriteria_model extends CI_Model {
 	{
 		return $this->db->get('kriteria')->result();
 	}
+	
+	function get_kriteria_by_id($kriteria_id)
+	{
+		$this->db->select('*');
+		$this->db->from('kriteria');
+		$this->db->where('kriteria_id', $kriteria_id);
+		return $this->db->get();
+	}
 }

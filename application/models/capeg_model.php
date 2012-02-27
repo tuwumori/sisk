@@ -190,5 +190,5 @@ class Capeg_model extends CI_Model {
 		$this->db->where('CAPEG_ID', $capeg_id);
 		$this->db->where('NAMA_KRITERIA', 'tes pengetahuan');
 		return $this->db->get();
-	}*/
+	}
 }

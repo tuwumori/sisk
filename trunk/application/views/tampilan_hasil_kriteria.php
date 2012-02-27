@@ -169,6 +169,10 @@
 			echo '<td>'.$alpha_max.'</td>';
 			echo '</tr>';
 			echo '<tr>';
+			echo '<td>Nilai IR :</td>';
+			echo '<td>'.$nilai_IR.'</td>';
+			echo '</tr>';
+			echo '<tr>';
 			echo '<td>Rasio Index (CI) :</td>';
 			echo '<td>'.$consistency_index.'</td>';
 			echo '</tr>';

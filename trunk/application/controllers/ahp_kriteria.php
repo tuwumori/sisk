@@ -129,7 +129,7 @@ class Ahp_kriteria extends CI_Controller {
 					$jumlah_per_cell2 = $jumlah_per_cell2 + $array2[$p][$o];
 				}
 				$jumlah_per_baris2[$o] = $jumlah_per_cell2;
-				$prioritas[$o] = $jumlah_per_cell2/$jumlah_kriteria;
+				$prioritas[$o] = round($jumlah_per_cell2/$jumlah_kriteria, 2);
 				//menyimpan nilai prioritas ke database tabel kriteria
 				$data = array('PRIORITAS_KRITERIA' => $prioritas[$o]);
 				$this->kriteria_model->update($this->input->post($o), $data);

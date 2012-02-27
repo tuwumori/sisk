@@ -173,9 +173,24 @@ class Ahp_kriteria extends CI_Controller {
 				//echo 'hasil ['.$t.'] => '.$jumlah_per_baris3[$t].'+'.$prioritas[$t].' = '.$hasil[$t];
 				//echo '<br />';
 			}
+			$nilai_IR[1] = 0.00;
+			$nilai_IR[2] = 0.00;
+			$nilai_IR[3] = 0.58;
+			$nilai_IR[4] = 0.90;
+			$nilai_IR[5] = 1.12;
+			$nilai_IR[6] = 1.24;
+			$nilai_IR[7] = 1.32;
+			$nilai_IR[8] = 1.41;
+			$nilai_IR[9] = 1.45;
+			$nilai_IR[10] = 1.49;
+			$nilai_IR[11] = 1.51;
+			$nilai_IR[12] = 1.48;
+			$nilai_IR[13] = 1.56;
+			$nilai_IR[14] = 1.57;
+			$nilai_IR[15] = 1.59;
 			$alpha_max = $jumlah/$jumlah_kriteria;
 			$consistency_index = ($alpha_max - $jumlah_kriteria)/$jumlah_kriteria;
-			$consistency_ratio = $consistency_index/1.12;
+			$consistency_ratio = $consistency_index/$nilai_IR[$jumlah_kriteria];
 			if($consistency_ratio <= 0.1)
 				$keterangan = 'rasio konsistensi dari perhitungan dapat diterima.';
 			else
@@ -190,6 +205,7 @@ class Ahp_kriteria extends CI_Controller {
 			$data['jumlah_per_baris2'] = $jumlah_per_baris2;
 			$data['jumlah_per_baris3'] = $jumlah_per_baris3;
 			$data['prioritas'] = $prioritas;
+			$data['nilai_IR'] = $nilai_IR[$jumlah_kriteria];
 			$data['keterangan'] = $keterangan;
 			$data['alpha_max'] = $alpha_max;
 			$data['consistency_index'] = $consistency_index;

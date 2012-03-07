@@ -47,10 +47,11 @@ class Subkriteria_model extends CI_Model {
 		$this->db->where('SUBKRITERIA_ID',$subkriteria_id)->update('subkriteria', $data);
 	}
 	
-	function get_pegawai()
+	function get_subkriteria_by_kriteria($kriteria_id)
 	{
 		$this->db->select('*');
-		$this->db->from('pegawai');
+		$this->db->from('subkriteria');
+		$this->db->where('KRITERIA_ID',$kriteria_id);
 		return $this->db->get();
 	}
 	

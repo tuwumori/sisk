@@ -9,6 +9,15 @@
                         <?php $nama_capeg = ''; if(set_value('nama_capeg')!='') $nama_capeg = set_value('nama_capeg')?>
 						<dd><?php echo form_input(array('name'=>'nama_capeg', 'id'=>'nama_capeg' ,'size'=>'54','type'=>'text', 'maxlength'=>'255', 'value'=>$nama_capeg)); ?></dd>
                     </dl>
+					<dl>
+                        <dt><label for="role">Bagian : </label></dt>
+                        <dd>
+                        <?php
+							$bagian_dipilih = 0; if(set_value('bagian')!=0) $bagian_dipilih = set_value('bagian');
+							echo form_dropdown('bagian', $bagian, $bagian_dipilih, 'size="1"');
+						?>
+						</dd>
+                    </dl>
                     <dl class="submit">
 						<dd><input type="submit" name="submit" id="submit" value="Submit" /></dd>
                     </dl>

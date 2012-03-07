@@ -101,9 +101,7 @@ ddaccordion.init({
                 <div class="submenu">
                     <ul>
 					<li><a href="<?php echo base_url() ?>index.php/master_bagian">Bagian</a></li>
-                    <li><a href="<?php echo base_url() ?>index.php/master_kriteria">Kriteria</a></li>
-					<li><a href="<?php echo base_url() ?>index.php/master_pertanyaan">Pertanyaan</a></li>
-                    
+                    <li><a href="<?php echo base_url() ?>index.php/master_kriteria">Kriteria</a></li>                    
 					<li><a href="<?php echo base_url() ?>index.php/master_pengguna">Pengguna</a></li>
                     </ul>
                 </div><?php } ?>

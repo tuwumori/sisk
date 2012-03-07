@@ -23,11 +23,15 @@ class Capeg_model extends CI_Model {
 	function get_data_flexigrid()
 	{
 		$this->db->select('*')->from('calon_pegawai');
+		$this->db->join('bagian','bagian.bagian_id = calon_pegawai.bagian_id');
+		$this->db->order_by('nilai_pegawai', "desc");
 			
 		$this->CI->flexigrid->build_query();		
 		$return['records'] = $this->db->get();
 		
 		$this->db->select('*')->from('calon_pegawai');
+		$this->db->join('bagian','bagian.bagian_id = calon_pegawai.bagian_id');
+		$this->db->order_by('nilai_pegawai', "desc");
 		
 		$this->CI->flexigrid->build_query(FALSE);
 		$return['record_count'] = $this->db->count_all_results();
@@ -43,7 +47,9 @@ class Capeg_model extends CI_Model {
 	{
 		$this->db->select('*');
 		$this->db->from('calon_pegawai');
+		$this->db->join('bagian','bagian.bagian_id = calon_pegawai.bagian_id');
 		$this->db->where('CAPEG_ID',$capeg_id);
+		$this->db->order_by('nilai_pegawai', "desc");
 		return $this->db->get();
 	}
 	
@@ -52,53 +58,30 @@ class Capeg_model extends CI_Model {
 		$this->db->delete('calon_pegawai', array('CAPEG_ID' => $id)); 
 	}
 	
-	function get_pertanyaan_perpeg($capeg_id){
+	function delete_nilai_kriteria_pegawai($capeg_id)
+	{
+		$this->db->delete('penilaian', array('CAPEG_ID' => $capeg_id)); 
+	}
+		
+	function get_penilaian($capeg_id, $kriteria_id){
 		$this->db->select('*');
-		$this->db->from('nilai_pegawai_per_pertanyaan');
-		$this->db->where('CAPEG_ID',$capeg_id);
+		$this->db->from('penilaian');
+		$this->db->where('CAPEG_ID', $capeg_id);
+		$this->db->where('KRITERIA_ID', $kriteria_id);
 		return $this->db->get();
 	}
 	
-	function get_pertanyaan($capeg_id, $bagian, $kriteria){
-		$this->db->select('*');
-		$this->db->from('nilai_pegawai_per_pertanyaan');
-		$this->db->join('pertanyaan', 'nilai_pegawai_per_pertanyaan.PERTANYAAN_ID = pertanyaan.PERTANYAAN_ID');
-		$this->db->join('kriteria', 'pertanyaan.KRITERIA_ID = kriteria.KRITERIA_ID'); 		
-		$this->db->join('bagian', 'pertanyaan.BAGIAN_ID = bagian.BAGIAN_ID');
-		$this->db->where('CAPEG_ID', $capeg_id);
-		$this->db->where('NAMA_KRITERIA', $kriteria);
-		$this->db->where('NAMA_BAGIAN', $bagian);
-		return $this->db->get();
-	}
-	/*
-	function update_perpertanyaan($pertanyaan_id, $data){
-		$this->db->where('NILAI_PEG_PERTANYAAN_ID',$pertanyaan_id)->update('nilai_pegawai_per_pertanyaan', $data);
+	function insert_nilai($data){
+		$this->db->insert('penilaian', $data);
 	}
 	
-	function get_sum_nilai_pertanyaan($capeg_id, $bagian, $kriteria){
-		$this->db->select_sum('NILAI');
-		$this->db->from('nilai_pegawai_per_pertanyaan');
-		$this->db->join('pertanyaan', 'nilai_pegawai_per_pertanyaan.PERTANYAAN_ID = pertanyaan.PERTANYAAN_ID');
-		$this->db->join('kriteria', 'pertanyaan.KRITERIA_ID = kriteria.KRITERIA_ID'); 		
-		$this->db->join('bagian', 'pertanyaan.BAGIAN_ID = bagian.BAGIAN_ID');
+	function get_sum_nilai($capeg_id){
+		$this->db->select_sum('TOTAL_NILAI');
+		$this->db->from('penilaian');
 		$this->db->where('CAPEG_ID', $capeg_id);
-		$this->db->where('NAMA_KRITERIA', $kriteria);
-		$this->db->where('NAMA_BAGIAN', $bagian);
 		return $this->db->get();
-		//return $result->row()->NILAI;
 	}
 	
-	function get_jumlah_pertanyaan($capeg_id, $bagian, $kriteria){
-		$this->db->select('*');
-		$this->db->from('nilai_pegawai_per_pertanyaan');
-		$this->db->join('pertanyaan', 'nilai_pegawai_per_pertanyaan.PERTANYAAN_ID = pertanyaan.PERTANYAAN_ID');
-		$this->db->join('kriteria', 'pertanyaan.KRITERIA_ID = kriteria.KRITERIA_ID'); 		
-		$this->db->join('bagian', 'pertanyaan.BAGIAN_ID = bagian.BAGIAN_ID');
-		$this->db->where('CAPEG_ID', $capeg_id);
-		$this->db->where('NAMA_KRITERIA', $kriteria);
-		$this->db->where('NAMA_BAGIAN', $bagian);
-		return $this->db->count_all_results();
-	}
 	
 	function get_prioritas_subkriteria($kriteria, $subkriteria){
 		$this->db->select('*');
@@ -150,7 +133,7 @@ class Capeg_model extends CI_Model {
 		$this->db->where('NAMA_KRITERIA', 'tes psikologi');
 		$this->db->where('NAMA_BAGIAN', $bagian);
 		return $this->db->get();
-	}*/
+	}
 	
 	function get_tes_akademik($capeg_id, $bagian){
 		$this->db->select('*');
@@ -190,5 +173,5 @@ class Capeg_model extends CI_Model {
 		$this->db->where('CAPEG_ID', $capeg_id);
 		$this->db->where('NAMA_KRITERIA', 'tes pengetahuan');
 		return $this->db->get();
-	}
+	}*/
 }

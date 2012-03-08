@@ -160,7 +160,7 @@ class Master_subkriteria extends CI_Controller {
 		$data['kriteria'] =  $data_kriteria;
 		$data['kriteria_dipilih'] = $this->subkriteria_model->get_subkriteria_by_id($subkriteria_id)->row()->KRITERIA_ID;;
 		$data['subkriteria'] = $this->subkriteria_model->get_subkriteria_by_id($subkriteria_id)->row()->NAMA_SUBKRITERIA;
-		$data['bobot'] = $this->subkriteria_model->get_subkriteria_by_id($subkriteria_id)->row()->BOBOT;
+		//$data['bobot'] = $this->subkriteria_model->get_subkriteria_by_id($subkriteria_id)->row()->BOBOT;
 		$data['content'] = $this->load->view('form_edit_master_subkriteria',$data,true);
 		$this->load->view('main',$data);
 	}
@@ -181,12 +181,12 @@ class Master_subkriteria extends CI_Controller {
 		{
 			$data['kriteria_dipilih'] = $this->subkriteria_model->get_subkriteria_by_id($subkriteria_id)->row()->KRITERIA_ID;;
 			$data['subkriteria'] = $this->subkriteria_model->get_subkriteria_by_id($subkriteria_id)->row()->NAMA_SUBKRITERIA;
-			$data['bobot'] = $this->subkriteria_model->get_subkriteria_by_id($subkriteria_id)->row()->BOBOT;
+			//$data['bobot'] = $this->subkriteria_model->get_subkriteria_by_id($subkriteria_id)->row()->BOBOT;
 			
 			echo validation_errors().'<script type="text/javascript">
 				$("#kriteria").val("'.$data['kriteria_dipilih'].'");
 				$("#subkriteria").val("'.$data['subkriteria'].'");
-				$("#bobot").val("'.$data['bobot'].'");
+				
 				$(".valid_box").remove();
 			</script>';
 		}
